@@ -34,4 +34,8 @@ class Item extends Model
     {
         return $this->belongsToMany(Category::class, 'item_category');
     }
+
+    public function favoriteUsers(){
+        return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
+    }
 }

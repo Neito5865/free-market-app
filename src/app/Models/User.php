@@ -52,4 +52,32 @@ class User extends Authenticatable
     {
         return $this->hasMany(Item::class);
     }
+
+    public function favorites(){
+        return $this->belongsToMany(Shop::class, 'favorites', 'user_id', 'item_id')->withTimestamps();
+    }
+
+    public function favorite($itemId){
+        $exist = $this->isFavorite($itemId);
+        if($exist){
+            return false;
+        }else{
+            $this->favorites()->attach($itemId);
+            return true;
+        }
+    }
+
+    public function unfavorite($itemId){
+        $exist = $this->isFavorite($itemId);
+        if($exist){
+            $this->favorites()->detach($itemId);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function isFavorite($itemId){
+        return $this->favorites()->where('item_id', $itemId)->exists();
+    }
 }

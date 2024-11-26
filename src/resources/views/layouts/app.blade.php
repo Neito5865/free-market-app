@@ -11,6 +11,8 @@
 </head>
 <body>
     @include('commons.header')
-    @yield('content')
+    <main>
+        @yield('content')
+    </main>
 </body>
 </html>

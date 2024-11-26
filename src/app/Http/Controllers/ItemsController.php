@@ -3,11 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Item;
 
 class ItemsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('index');
+        $page = $request->query('page', 'recommend');
+
+        if ($page === 'recommend') {
+            $items = Item::orderBy('id', 'desc')->get();
+        } elseif ($page === 'mylist') {
+            // if (!Auth::check()) {
+            //     return redirect()->route('login');
+            // }
+            $items = Auth::user()->favorites()->orderBy('id', 'desc')->get();
+        } else {
+            $items = Item::orderBy('id', 'desc')->get();
+        }
+
+        return view('index', compact('page', 'items'));
     }
 }
