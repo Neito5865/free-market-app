@@ -1,3 +1,6 @@
+.header__search-form, .header__nav{
+    display: none;
+}
 .register__container{
     margin: 0 auto;
     width: 95%;
