@@ -10,15 +10,20 @@ class ItemsController extends Controller
 {
     public function index(Request $request)
     {
-        $page = $request->query('page', 'recommend');
+        $page = $request->query('page');
+
+        if (!$page) {
+            $page = Auth::check() ? 'mylist' : 'recommend';
+        }
 
         if ($page === 'recommend') {
             $items = Item::orderBy('id', 'desc')->get();
         } elseif ($page === 'mylist') {
-            // if (!Auth::check()) {
-            //     return redirect()->route('login');
-            // }
-            $items = Auth::user()->favorites()->orderBy('id', 'desc')->get();
+            if (!Auth::check()) {
+                $items = collect();
+            } else {
+                $items = Auth::user()->favorites()->orderBy('id', 'desc')->get();
+            }
         } else {
             $items = Item::orderBy('id', 'desc')->get();
         }
