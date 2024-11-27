@@ -35,6 +35,10 @@
 .item-card{
     width: 100%;
 }
+.item-card a{
+    text-decoration: none;
+    color: #000;
+}
 .item-card__img{
     width: 100%;
     height: auto;
@@ -53,7 +57,7 @@
 
 @media(max-width: 959px){
     .item-list__content-f{
-            grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 @media(max-width: 768px) {

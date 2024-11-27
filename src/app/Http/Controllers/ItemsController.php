@@ -30,4 +30,15 @@ class ItemsController extends Controller
 
         return view('index', compact('page', 'items'));
     }
+
+    public function show($id)
+    {
+        $item = Item::find($id);
+        if (!$item) {
+            return response()->view('errors.error-page', ['message' => 'ページを表示できません。'], 404);
+        }
+        $categories = $item->categories()->get();
+
+        return view('items.show', compact('item', 'categories'));
+    }
 }

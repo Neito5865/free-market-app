@@ -16,3 +16,5 @@ use App\Http\Controllers\ItemsController;
 
 // トップページ
 Route::get('/', [ItemsController::class, 'index'])->name('item.index');
+// 商品詳細ページ
+Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
