@@ -57,8 +57,17 @@
     border-radius: 4px;
     padding: 8px 20px;
 }
+.header-nav__logout-form--submit{
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    background-color: transparent;
+    transition: opacity 0.3s ease;
+}
+.header-nav__logout-form--submit:hover{
+    opacity: 0.7;
+}
 
-/* タブレットサイズ */
 @media(max-width: 959px) {
     .header {
         height: auto;

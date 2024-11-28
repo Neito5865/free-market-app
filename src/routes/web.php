@@ -19,8 +19,3 @@ use App\Http\Controllers\UsersController;
 Route::get('/', [ItemsController::class, 'index'])->name('item.index');
 // 商品詳細ページ
 Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
-
-// 会員登録・ログイン・プロフィール（仮）
-Route::get('register', [UsersController::class, 'register']);
-Route::get('login', [UsersController::class, 'login']);
-Route::get('profile', [UsersController::class, 'profile']);

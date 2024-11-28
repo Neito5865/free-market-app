@@ -10,7 +10,7 @@
             <h2>ログイン</h2>
         </div>
         <div class="login__form">
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="login-form__group">
                     <label class="login-form__label" for="email">メールアドレス</label>
@@ -26,7 +26,7 @@
             </form>
         </div>
         <div class="login__link">
-            <a href="">会員登録はこちら</a>
+            <a href="{{ route('register') }}">会員登録はこちら</a>
         </div>
     </div>
 @endsection
