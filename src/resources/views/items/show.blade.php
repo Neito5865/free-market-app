@@ -19,7 +19,7 @@
                     <small class="item-show__brand">ブランド名</small>
                 </div>
                 <div class="item-show__price">
-                    <p>&yen;<span>{{ $item->price}}</span>(税込)</p>
+                    <p>&yen;<span>{{ $item->formatted_price }}</span>(税込)</p>
                 </div>
                 <div class="item-show__actions">
                     <div class="action-favorite">

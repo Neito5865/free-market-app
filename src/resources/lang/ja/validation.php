@@ -149,7 +149,7 @@ return [
         ],
         'password_confirmation' => [
             'required' => '確認用パスワードを入力してください',
-            'same' => '確認用パスワードと一致しません',
+            'same' => 'パスワードと一致しません',
         ],
     ],
 

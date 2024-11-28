@@ -20,6 +20,11 @@ class Item extends Model
         'condition_id',
     ];
 
+    public function getFormattedPriceAttribute()
+    {
+        return number_format($this->price);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
