@@ -16,8 +16,8 @@ class UsersController extends Controller
         return view('auth.login');
     }
 
-    public function profile()
+    public function show()
     {
-        return view('auth.profile-create');
+        return view('users.show');
     }
 }

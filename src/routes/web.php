@@ -21,7 +21,7 @@ use App\Http\Controllers\UsersController;
 // メール認証通知を表示
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
-})->name('verification.notice');
+})->middleware('auth')->name('verification.notice');
 // メール認証リンクを検証
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
@@ -30,7 +30,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 // メール認証リンクを再送
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', '認証リンクが送信されました。');
+    return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // 会員登録
@@ -38,7 +38,7 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 Route::post('/register', [RegisterController::class, 'create'])->name('create.register');
-Route::get('/profile', function(){
+Route::get('/profile', function() {
     return view('auth.profile-create');
 })->name('profile.create');
 
@@ -48,6 +48,6 @@ Route::get('/', [ItemsController::class, 'index'])->name('item.index');
 Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
 
 // ログイン後
-Route::middleware(['auth', 'verified'])->group(function(){
-    //
+Route::middleware(['auth', 'verified.email'])->group(function() {
+    Route::get('/mypage', [UsersController::class, 'show'])->name('user.show');
 });

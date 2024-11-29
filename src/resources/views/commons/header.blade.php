@@ -20,11 +20,11 @@
                                     <input class="header-nav__logout-form--submit" type="submit" value="ログアウト">
                                 </form>
                             </li>
-                            <li class="header-nav__item"><a class="header-nav__link" href="">マイページ</a></li>
+                            <li class="header-nav__item"><a class="header-nav__link" href="{{ route('user.show') }}">マイページ</a></li>
                             <li class="header-nav__item"><a class="header-nav__link" href="">出品</a></li>
                         @else
                             <li class="header-nav__item"><a class="header-nav__link" href="{{ route('login') }}">ログイン</a></li>
-                            <li class="header-nav__item"><a class="header-nav__link" href="">マイページ</a></li>
+                            <li class="header-nav__item"><a class="header-nav__link" href="{{ route('user.show') }}">マイページ</a></li>
                             <li class="header-nav__item"><a class="header-nav__link" href="">出品</a></li>
                         @endif
                     </ul>
