@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\FavoriteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,10 @@ Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
 // ログイン後
 Route::middleware(['auth', 'verified.email'])->group(function() {
     Route::get('/mypage', [UsersController::class, 'show'])->name('user.show');
+
+    // いいね機能
+    Route::prefix('item/{id}')->group(function(){
+        Route::post('favorite', [FavoriteController::class, 'store'])->name('favorite');
+        Route::delete('unfavorite', [FavoriteController::class, 'destroy'])->name('unfavorite');
+    });
 });

@@ -13,9 +13,17 @@ class ItemsController extends Controller
         $page = $request->query('page', 'recommend');
 
         if ($page === 'recommend') {
-            $items = Item::orderBy('id', 'desc')->get();
+            $itemsQuery = Item::orderBy('id', 'desc');
+            if (Auth::check()) {
+                $itemsQuery->where('user_id', '!=', Auth::id());
+            }
+            $items = $itemsQuery->get();
         } elseif ($page === 'mylist') {
-            $items = Auth::check() ? Auth::user()->favorites()->orderBy('id', 'desc')->get() : collect();
+            if (Auth::check()) {
+                $items = Auth::user()->favorites()->withPivot('created_at')->orderBy('pivot_created_at', 'desc')->get();
+            } else {
+                $items = collect();
+            }
         } else {
             $items = Item::orderBy('id', 'desc')->get();
         }
@@ -30,7 +38,8 @@ class ItemsController extends Controller
             return response()->view('errors.error-page', ['message' => 'ページを表示できません。'], 404);
         }
         $categories = $item->categories()->get();
+        $countFavorites = $item->favoriteUsers()->count();
 
-        return view('items.show', compact('item', 'categories'));
+        return view('items.show', compact('item', 'categories', 'countFavorites'));
     }
 }

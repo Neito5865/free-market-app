@@ -25,13 +25,13 @@
                     <div class="action-favorite">
                         @if(Auth::check())
                             @if(Auth::user()->isFavorite($item->id))
-                                <form class="favorite-icon__form" method="POST" action="">
+                                <form class="favorite-icon__form" method="POST" action="{{ route('unfavorite', $item->id) }}">
                                     @method('DELETE')
                                     @csrf
                                     <button class="favorite-icon__form-btn favorited" type="submit"><i class="fa-solid fa-star"></i></button>
                                 </form>
                             @else
-                                <form class="favorite-icon__form" method="POST" action="">
+                                <form class="favorite-icon__form" method="POST" action="{{ route('favorite', $item->id) }}">
                                     @csrf
                                     <button class="favorite-icon__form-btn" type="submit"><i class="fa-regular fa-star"></i></button>
                                 </form>
@@ -41,7 +41,7 @@
                                 <i class="fa-regular fa-star"></i>
                             </div>
                         @endif
-                        <small class="favorite-count">1</small>
+                        <small class="favorite-count">{{ $countFavorites }}</small>
                     </div>
                     <div class="action-comment">
                         <div class="comment-icon">

@@ -75,6 +75,14 @@
     margin: 0;
     padding: 0;
 }
+.favorite-icon__form-btn{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.favorite-icon__form-btn.favorited{
+    color: #eabc32;
+}
 .item-show__purchase-btn{
     text-align: center;
     margin-bottom: 30px;

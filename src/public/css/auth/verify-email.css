@@ -35,7 +35,9 @@
     padding: 8px 20px;
     cursor: pointer;
 }
-.backtop-link{
-    text-decoration: none;
+.verify__logout-form--submit{
+    border: none;
+    background-color: transparent;
     color: #0073cc;
+    cursor: pointer;
 }
