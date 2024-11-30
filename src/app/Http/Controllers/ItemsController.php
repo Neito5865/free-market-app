@@ -39,7 +39,8 @@ class ItemsController extends Controller
         }
         $categories = $item->categories()->get();
         $countFavorites = $item->favoriteUsers()->count();
+        $comments = $item->comments()->orderBy('id', 'asc')->get();
 
-        return view('items.show', compact('item', 'categories', 'countFavorites'));
+        return view('items.show', compact('item', 'categories', 'countFavorites', 'comments'));
     }
 }

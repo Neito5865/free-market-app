@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\CommentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,9 +53,13 @@ Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
 Route::middleware(['auth', 'verified.email'])->group(function() {
     Route::get('/mypage', [UsersController::class, 'show'])->name('user.show');
 
-    // いいね機能
     Route::prefix('item/{id}')->group(function(){
+        // いいね機能
         Route::post('favorite', [FavoriteController::class, 'store'])->name('favorite');
         Route::delete('unfavorite', [FavoriteController::class, 'destroy'])->name('unfavorite');
+
+        // コメント機能
+        Route::post('comment', [CommentsController::class, 'store'])->name('comment.store');
     });
+
 });

@@ -75,15 +75,7 @@
                     </dl>
                 </div>
                 <div class="item-show__comment">
-                    <h3 class="comment__header">コメント(1)</h3>
-                    <div class="comment__about">
-                        <div class="profile-img">
-                            <img src="{{ asset('storage/profile-img/person-default.png') }}" alt="プロフィール画像">
-                        </div>
-                        <div class="comment__text">
-                            <p>こちらにコメントが入ります。</p>
-                        </div>
-                    </div>
+                    @include('comments.comments')
                     <div class="comment-form">
                         <h4 class="comment-form__header">商品へのコメント</h4>
                         <form method="" action="">
