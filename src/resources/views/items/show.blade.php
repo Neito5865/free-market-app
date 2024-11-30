@@ -16,7 +16,7 @@
             <div class="content-right__inner">
                 <div class="item-show__header">
                     <h2>{{ $item->name }}</h2>
-                    <small class="item-show__brand">ブランド名</small>
+                    <small class="item-show__brand">{{ $item->brand }}</small>
                 </div>
                 <div class="item-show__price">
                     <p>&yen;<span>{{ $item->formatted_price }}</span>(税込)</p>

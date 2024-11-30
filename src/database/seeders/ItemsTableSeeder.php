@@ -23,7 +23,8 @@ class ItemsTableSeeder extends Seeder
                 'price' => $data[3],
                 'description' => $data[4],
                 'image' => $data[5],
-                'condition_id' => $data[6],
+                'brand' => $data[6],
+                'condition_id' => $data[7],
             ]);
         }
         fclose($file);
