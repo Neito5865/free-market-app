@@ -47,7 +47,7 @@
                         <div class="comment-icon">
                             <i class="fa-regular fa-comment"></i>
                         </div>
-                        <small class="comment-count">1</small>
+                        <small class="comment-count">{{ $countComments }}</small>
                     </div>
                 </div>
                 <div class="item-show__purchase-btn">
@@ -76,11 +76,16 @@
                 </div>
                 <div class="item-show__comment">
                     @include('comments.comments')
-                    <div class="comment-form">
+                    <div class="comment-form" id="comment-form">
                         <h4 class="comment-form__header">商品へのコメント</h4>
-                        <form method="" action="">
+                        <form method="POST" action="{{ route('comment.store', $item->id) }}#comment-form">
                             @csrf
-                            <textarea class="comment-form__textarea" name="comment" id="comment"></textarea>
+                            <textarea class="comment-form__textarea" name="comment" id="comment">{{ old('comment') }}</textarea>
+                            <div class="comment-form__error">
+                                @error('comment')
+                                {{ $message }}
+                                @enderror
+                            </div>
                             <input class="comment-form__submit" type="submit" value="コメントを送信する">
                         </form>
                     </div>
