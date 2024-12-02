@@ -8,6 +8,7 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\SellProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,12 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
 
         // コメント機能
         Route::post('comment', [CommentsController::class, 'store'])->name('comment.store');
+    });
+
+    // 出品
+    Route::prefix('sell')->group(function(){
+        // 出品画面の表示
+        Route::get('', [SellProductController::class, 'create'])->name('product.create');
     });
 
 });
