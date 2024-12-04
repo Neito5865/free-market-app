@@ -75,10 +75,21 @@
                 <div class="item-create-form__group">
                     <div class="item-create-form__group--content">
                         <label class="item-create-form__label" for="name">商品名</label>
-                        <input class="item-create-form__input" type="text" name="name" id="name" value="{{ old('name') }}">
+                        <input class="item-create-form__input input-name" type="text" name="name" id="name" value="{{ old('name') }}">
                     </div>
                     <div class="item-create-form__error">
                         @error('name')
+                        {{ $message }}
+                        @enderror
+                    </div>
+                </div>
+                <div class="item-create-form__group">
+                    <div class="item-create-form__group--content">
+                        <label class="item-create-form__label" for="brand">ブランド名</label>
+                        <input class="item-create-form__input input-brand" type="text" name="brand" id="brand" value="{{ old('brand') }}">
+                    </div>
+                    <div class="item-create-form__error">
+                        @error('brand')
                         {{ $message }}
                         @enderror
                     </div>
@@ -97,7 +108,10 @@
                 <div class="item-create-form__group">
                     <div class="item-create-form__group--content">
                         <label class="item-create-form__label" for="price">販売価格</label>
-                        <input class="item-create-form__input" type="text" name="price" id="price">
+                        <div class="text-input-container__price">
+                            <span class="text-input__prefix-label--price">&yen;</span>
+                            <input class="item-create-form__input input-price" type="text" name="price" id="price">
+                        </div>
                     </div>
                     <div class="item-create-form__error">
                         @error('price')
