@@ -41,7 +41,7 @@
 }
 .item-card__img{
     width: 100%;
-    height: auto;
+    aspect-ratio: 1 / 1;
 }
 .item-card__img img{
     width: 100%;

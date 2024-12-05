@@ -193,3 +193,8 @@
     font-weight: 700;
     cursor: pointer;
 }
+
+.item-create-form__error{
+    color: #ff0000;
+    margin-top: 10px;
+}

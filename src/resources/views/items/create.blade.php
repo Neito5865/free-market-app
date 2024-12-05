@@ -10,7 +10,7 @@
             <h2>商品の出品</h2>
         </div>
         <div class="item-create__form">
-            <form method="" action="">
+            <form method="POST" action="{{ route('item.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="item-create-form__group">
                     <div class="item-create-form__group--content">

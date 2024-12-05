@@ -52,21 +52,28 @@ Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
 
 // ログイン後
 Route::middleware(['auth', 'verified.email'])->group(function() {
-    Route::get('/mypage', [UsersController::class, 'show'])->name('user.show');
+    Route::get('mypage', [UsersController::class, 'show'])->name('user.show');
 
     Route::prefix('item/{id}')->group(function(){
         // いいね機能
         Route::post('favorite', [FavoriteController::class, 'store'])->name('favorite');
         Route::delete('unfavorite', [FavoriteController::class, 'destroy'])->name('unfavorite');
 
-        // コメント機能
+        // コメント送信機能
         Route::post('comment', [CommentsController::class, 'store'])->name('comment.store');
     });
 
     // 出品
     Route::prefix('sell')->group(function(){
         // 出品画面の表示
-        Route::get('', [SellProductController::class, 'create'])->name('product.create');
+        Route::get('', [SellProductController::class, 'create'])->name('item.create');
+        // 出品機能
+        Route::post('', [SellProductController::class, 'store'])->name('item.store');
     });
 
+    // マイページ関係
+    Route::prefix('mypage')->group(function(){
+        // マイページ画面
+        Route::get('', [UsersController::class, 'show'])->name('user.show');
+    });
 });
