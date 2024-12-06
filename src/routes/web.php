@@ -41,9 +41,7 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 Route::post('/register', [RegisterController::class, 'create'])->name('create.register');
-Route::get('/profile', function() {
-    return view('auth.profile-create');
-})->name('profile.create');
+
 
 // トップページ
 Route::get('/', [ItemsController::class, 'index'])->name('item.index');
@@ -52,8 +50,6 @@ Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
 
 // ログイン後
 Route::middleware(['auth', 'verified.email'])->group(function() {
-    Route::get('mypage', [UsersController::class, 'show'])->name('user.show');
-
     Route::prefix('item/{id}')->group(function(){
         // いいね機能
         Route::post('favorite', [FavoriteController::class, 'store'])->name('favorite');
@@ -72,6 +68,12 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
     });
 
     // マイページ関係
+    // ログイン後のプロフィール設定
+    Route::prefix('profile')->group(function(){
+        Route::get('', [UsersController::class, 'create'])->name('profile.create');
+        Route::post('', [UsersController::class, 'store'])->name('profile.store');
+    });
+    Route::post('profile', [UsersController::class, 'firstEdit'])->name('first.edit');
     Route::prefix('mypage')->group(function(){
         // マイページ画面
         Route::get('', [UsersController::class, 'show'])->name('user.show');

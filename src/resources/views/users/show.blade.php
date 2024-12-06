@@ -12,11 +12,13 @@
     @endif
     <div class="mypage__container">
         <div class="profile__content">
-            <div class="profile__image">
-                <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="プロフィール画像">
-            </div>
-            <div class="profile__name">
-                <p>{{ Auth::user()->name }}</p>
+            <div class="profile-inner">
+                <div class="profile__image">
+                    <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="プロフィール画像">
+                </div>
+                <div class="profile__name">
+                    <p>{{ Auth::user()->name }}</p>
+                </div>
             </div>
             <div class="profile__btn--edit">
                 <a href="">プロフィールを編集</a>
@@ -24,8 +26,8 @@
         </div>
         <div class="tabs">
             <div class="tabs__labels">
-                <a href="{{ url('/mypage') }}?tab=sell" class="tab {{ $tab === 'exhibition' ? 'active' : '' }}">出品した商品</a>
-                <a href="{{ url('/mypage') }}?tab=buy" class="tab {{ $tab === 'purchase' ? 'active' : '' }}">購入した商品</a>
+                <a href="{{ url('/mypage') }}?tab=sell" class="tab {{ $tab === 'sell' ? 'active' : '' }}">出品した商品</a>
+                <a href="{{ url('/mypage') }}?tab=buy" class="tab {{ $tab === 'buy' ? 'active' : '' }}">購入した商品</a>
             </div>
             <div class="item-list">
                 @include('items.items')
