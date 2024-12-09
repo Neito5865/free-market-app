@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="profile__btn--edit">
-                <a href="">プロフィールを編集</a>
+                <a href="{{ route('user.edit') }}">プロフィールを編集</a>
             </div>
         </div>
         <div class="tabs">

@@ -10,12 +10,12 @@
             <h2>プロフィール設定</h2>
         </div>
         <div class="profile__form">
-            <form method="POST" action="{{ route('user.firstUpdate') }}" enctype="multipart/form-data">
+            <form method="POST" action="" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="profile-form__group">
                     <div class="profile-form__group--content">
-                        <div class="profile-image-preview" id="profileImagePreview"></div>
+                        <div class="profile-image-preview" id="profileImagePreview" style="background-image: url('{{ $user->image ? asset('storage/' . $user->image) : asset('storage/profile-img/person-default.png') }}');"></div>
                         <label class="profile-form__label--image" for="image">画像を選択する</label>
                         <input class="profile-form__input" id="image" type="file" name="image" accept="image/*">
                     </div>
@@ -39,7 +39,7 @@
                 <div class="profile-form__group">
                     <div class="profile-form__group--content">
                         <label class="profile-form__label" for="postCode">郵便番号</label>
-                        <input class="profile-form__input" type="text" name="postCode" id="postCode" value="{{ old('postCode') }}">
+                        <input class="profile-form__input" type="text" name="postCode" id="postCode" value="{{ old('postCode', $user->postCode) }}">
                     </div>
                     <div class="profile-form__error">
                         @error('postCode')
@@ -50,7 +50,7 @@
                 <div class="profile-form__group">
                     <div class="profile-form__group--content">
                         <label class="profile-form__label" for="address">住所</label>
-                        <input class="profile-form__input" type="text" name="address" id="address" value="{{ old('address') }}">
+                        <input class="profile-form__input" type="text" name="address" id="address" value="{{ old('address', $user->address) }}">
                     </div>
                     <div class="profile-form__error">
                         @error('address')
@@ -61,7 +61,7 @@
                 <div class="profile-form__group">
                     <div class="profile-form__group--content">
                         <label class="profile-form__label" for="building">建物名</label>
-                        <input class="profile-form__input" type="text" name="building" id="building" value="{{ old('building') }}">
+                        <input class="profile-form__input" type="text" name="building" id="building" value="{{ old('building', $user->building) }}">
                     </div>
                     <div class="profile-form__error">
                         @error('building')

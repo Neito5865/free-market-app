@@ -48,4 +48,10 @@ class UsersController extends Controller
 
         return view('users.show', compact('tab', 'items', 'user'));
     }
+
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('users.edit', compact('user'));
+    }
 }
