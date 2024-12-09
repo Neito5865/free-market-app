@@ -28,7 +28,7 @@ Route::get('/email/verify', function () {
 // メール認証リンクを検証
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
-    return redirect()->route('profile.create');
+    return redirect()->route('user.firstEdit');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 // メール認証リンクを再送
 Route::post('/email/verification-notification', function (Request $request) {
@@ -70,8 +70,8 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
     // マイページ関係
     // ログイン後のプロフィール設定
     Route::prefix('profile')->group(function(){
-        Route::get('', [UsersController::class, 'create'])->name('profile.create');
-        Route::post('', [UsersController::class, 'store'])->name('profile.store');
+        Route::get('', [UsersController::class, 'firstEdit'])->name('user.firstEdit');
+        Route::put('', [UsersController::class, 'firstUpdate'])->name('user.firstUpdate');
     });
     Route::post('profile', [UsersController::class, 'firstEdit'])->name('first.edit');
     Route::prefix('mypage')->group(function(){

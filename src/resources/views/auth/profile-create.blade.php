@@ -10,28 +10,64 @@
             <h2>プロフィール設定</h2>
         </div>
         <div class="profile-create__form">
-            <form method="POST" action="" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('user.firstUpdate') }}" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="profile-create-form__group">
-                    <div class="profile-image-preview" id="profileImagePreview"></div>
-                    <label class="profile-create-form__label--image" for="image">画像を選択する</label>
-                    <input class="profile-create-form__input" id="image" type="file" name="image" accept="image/*">
+                    <div class="profile-create-form__group--content">
+                        <div class="profile-image-preview" id="profileImagePreview"></div>
+                        <label class="profile-create-form__label--image" for="image">画像を選択する</label>
+                        <input class="profile-create-form__input" id="image" type="file" name="image" accept="image/*">
+                    </div>
+                    <div class="profile-create-form__error">
+                        @error('image')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
                 <div class="profile-create-form__group">
-                    <label class="profile-create-form__label" for="name">ユーザー名</label>
-                    <input class="profile-create-form__input" type="text" name="name" id="name" value="{{ old('name')}}">
+                    <div class="profile-create-form__group--content">
+                        <label class="profile-create-form__label" for="name">ユーザー名</label>
+                        <input class="profile-create-form__input" type="text" name="name" id="name" value="{{ old('name', $user->name) }}">
+                    </div>
+                    <div class="profile-create-form__error">
+                        @error('name')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
                 <div class="profile-create-form__group">
-                    <label class="profile-create-form__label" for="postCode">郵便番号</label>
-                    <input class="profile-create-form__input" type="text" name="postCode" id="postCode" value="{{ old('postCode')}}">
+                    <div class="profile-create-form__group--content">
+                        <label class="profile-create-form__label" for="postCode">郵便番号</label>
+                        <input class="profile-create-form__input" type="text" name="postCode" id="postCode" value="{{ old('postCode') }}">
+                    </div>
+                    <div class="profile-create-form__error">
+                        @error('postCode')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
                 <div class="profile-create-form__group">
-                    <label class="profile-create-form__label" for="address">住所</label>
-                    <input class="profile-create-form__input" type="text" name="address" id="address" value="{{ old('address')}}">
+                    <div class="profile-create-form__group--content">
+                        <label class="profile-create-form__label" for="address">住所</label>
+                        <input class="profile-create-form__input" type="text" name="address" id="address" value="{{ old('address') }}">
+                    </div>
+                    <div class="profile-create-form__error">
+                        @error('address')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
                 <div class="profile-create-form__group">
-                    <label class="profile-create-form__label" for="building">建物名</label>
-                    <input class="profile-create-form__input" type="text" name="building" id="building" value="{{ old('building')}}">
+                    <div class="profile-create-form__group--content">
+                        <label class="profile-create-form__label" for="building">建物名</label>
+                        <input class="profile-create-form__input" type="text" name="building" id="building" value="{{ old('building') }}">
+                    </div>
+                    <div class="profile-create-form__error">
+                        @error('building')
+                        {{ $message }}
+                        @enderror
+                    </div>
                 </div>
                 <div class="profile-create-form__button">
                     <input class="profile-create-form__button-submit" type="submit" value="更新する">

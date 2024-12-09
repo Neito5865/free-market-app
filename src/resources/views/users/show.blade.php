@@ -14,10 +14,10 @@
         <div class="profile__content">
             <div class="profile-inner">
                 <div class="profile__image">
-                    <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="プロフィール画像">
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="プロフィール画像">
                 </div>
                 <div class="profile__name">
-                    <p>{{ Auth::user()->name }}</p>
+                    <p>{{ $user->name }}</p>
                 </div>
             </div>
             <div class="profile__btn--edit">
