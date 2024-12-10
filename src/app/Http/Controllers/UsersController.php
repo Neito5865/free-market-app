@@ -54,4 +54,21 @@ class UsersController extends Controller
         $user = Auth::user();
         return view('users.edit', compact('user'));
     }
+
+    public function update(ProfileRequest $request)
+    {
+        $user = Auth::user();
+        $userData = $request->only([
+            'name',
+            'postCode',
+            'address',
+            'building',
+        ]);
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('profile-img', 'public');
+            $userData['image'] = 'profile-img/' . basename($path);
+        }
+        $user->update($userData);
+        return redirect()->route('user.show')->with('successMessage', 'プロフィールを更新しました');
+    }
 }

@@ -10,7 +10,7 @@
             <h2>プロフィール設定</h2>
         </div>
         <div class="profile__form">
-            <form method="POST" action="" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('user.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="profile-form__group">

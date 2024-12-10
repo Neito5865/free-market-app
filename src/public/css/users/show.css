@@ -1,3 +1,13 @@
+.message__success{
+    background-color: #caf8e8;
+    color: #2f5e4e;
+    margin: 20px auto 0 auto;
+    width: 90%;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 40px;
+    border-radius: 5px;
+}
 .profile__content{
     display: flex;
     justify-content: center;

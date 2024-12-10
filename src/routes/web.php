@@ -79,5 +79,7 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
         Route::get('', [UsersController::class, 'show'])->name('user.show');
         // マイページ編集画面
         Route::get('/profile', [UsersController::class, 'edit'])->name('user.edit');
+        // マイページ編集処理
+        Route::put('/profile', [UsersController::class, 'update'])->name('user.update');
     });
 });
