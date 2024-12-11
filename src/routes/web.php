@@ -9,6 +9,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\SellProductController;
+use App\Http\Controllers\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,6 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
         Route::get('', [UsersController::class, 'firstEdit'])->name('user.firstEdit');
         Route::put('', [UsersController::class, 'firstUpdate'])->name('user.firstUpdate');
     });
-    Route::post('profile', [UsersController::class, 'firstEdit'])->name('first.edit');
     Route::prefix('mypage')->group(function(){
         // マイページ画面
         Route::get('', [UsersController::class, 'show'])->name('user.show');
@@ -81,5 +81,11 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
         Route::get('/profile', [UsersController::class, 'edit'])->name('user.edit');
         // マイページ編集処理
         Route::put('/profile', [UsersController::class, 'update'])->name('user.update');
+    });
+
+    // 購入関係
+    Route::prefix('purchase')->group(function(){
+        // 購入画面の表示
+        Route::get('{id}', [PurchaseController::class, 'show'])->name('purchase.show');
     });
 });
