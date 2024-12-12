@@ -17,7 +17,7 @@
                             <h2>{{ $item->name }}</h2>
                         </div>
                         <div class="item__price">
-                            <p>&yen;<span>{{ $item->formatted_price }}</span></p>
+                            <p>&yen; <span>{{ $item->formatted_price }}</span></p>
                         </div>
                     </div>
                 </div>
@@ -25,20 +25,59 @@
                     <div class="payment__hading">
                         <h3>支払い方法</h3>
                     </div>
-                    <div class="payment__select"></div>
+                    <div class="payment__select">
+                        <select name="" id="">
+                            <option value="">選択してください</option>
+                            <option value="">コンビニ払い</option>
+                            <option value="">カード支払い</option>
+                        </select>
+                        <div class="triangle"></div>
+                    </div>
                 </div>
                 <div class="purchase__section--address">
                     <div class="address__heading-flex">
-                        <div class="address__hading"></div>
-                        <div class="address__link--edit"></div>
+                        <div class="address__hading">
+                            <h3>配送先</h3>
+                        </div>
+                        <div class="address__link--edit">
+                            <a href="">変更する</a>
+                        </div>
                     </div>
                     <div class="address__text">
-                        <p></p>
-                        <p></p>
+                        @if (session('selected_address'))
+                            <p>〒 {{ session('selected_address')['postCode'] }}</p>
+                            <p>{{ session('selected_address')['address'] }}</p>
+                            <p>{{ session('selected_address')['building'] ?? '' }}</p>
+                        @elseif ($user->postCode || $user->address)
+                            <p>〒 {{ $user->postCode ?? '未登録'}}</p>
+                            <p>{{ $user->address ?? '未登録'}}</p>
+                            <p>{{ $user->building ?? ''}}</p>
+                        @else
+                            <p>配送先が未設定です。</p>
+                            <p>「変更する」から配送先を登録してください。</p>
+                        @endif
                     </div>
                 </div>
             </div>
-            <div class="purchase__right"></div>
+            <div class="purchase__right">
+                <div class="price-payment-box">
+                    <table>
+                        <tr class="box__row">
+                            <td class="box__label">商品代金</td>
+                            <td class="box__value"><span class="box__value--yen">&yen; </span>{{ $item->price }}</td>
+                        </tr>
+                        <tr class="box__row">
+                            <td class="box__label">支払い方法</td>
+                            <td class="box__value">コンビニ払い</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="purchase-form">
+                    <form method="" action="">
+                        <button class="purchase-form__btn" type="submit">購入する</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
