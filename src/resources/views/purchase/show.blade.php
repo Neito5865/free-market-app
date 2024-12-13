@@ -26,10 +26,10 @@
                         <h3>支払い方法</h3>
                     </div>
                     <div class="payment__select">
-                        <select name="" id="">
-                            <option value="">選択してください</option>
-                            <option value="">コンビニ払い</option>
-                            <option value="">カード支払い</option>
+                        <select name="paymentMethod" id="payment-select">
+                            <option value="" disabled selected>選択してください</option>
+                            <option value="1">コンビニ払い</option>
+                            <option value="2">カード支払い</option>
                         </select>
                         <div class="triangle"></div>
                     </div>
@@ -68,7 +68,7 @@
                         </tr>
                         <tr class="box__row">
                             <td class="box__label">支払い方法</td>
-                            <td class="box__value">コンビニ払い</td>
+                            <td class="box__value" id="selected-payment-method">選択してください</td>
                         </tr>
                     </table>
                 </div>
@@ -80,4 +80,30 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        document.getElementById('payment-select').addEventListener('click', function() {
+            const firstOption = this.querySelector('option[value=""]');
+            if (firstOption) {
+                firstOption.style.display = 'none';
+            }
+        });
+
+        document.getElementById('payment-select').addEventListener('change', function() {
+            const selectedValue = this.value;
+
+            let paymentText = '';
+            if (selectedValue === '1') {
+                paymentText = 'コンビニ払い';
+            } else if (selectedValue === '2') {
+                paymentText = 'カード支払い';
+            } else {
+                paymentText = '選択してください';
+            }
+
+            document.getElementById('selected-payment-method').textContent = paymentText;
+        })
+    </script>
 @endsection

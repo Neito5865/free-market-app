@@ -13,7 +13,7 @@
 .purchase__section--item{
     border-bottom: 1px solid #000;
     display: flex;
-    gap: 60px;
+    gap: 8vw;
     padding-bottom: 50px;
 }
 .item__image{
@@ -143,4 +143,50 @@
     height: 60px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+@media(max-width: 959px) {
+    .purchase__inner-f {
+        flex-direction: column;
+        gap: 60px;
+    }
+    .purchase__left {
+        width: 100%;
+    }
+    .purchase__right {
+        width: 100%;
+    }
+}
+
+@media(max-width: 767px) {
+    .item__image {
+        width: 160px;
+        height: 160px;
+    }
+    .item__name h2 {
+        font-size: 24px;
+    }
+    .item__price p {
+        font-size: 20px;
+    }
+
+    .item__price span {
+        font-size: 28px;
+    }
+    .payment__select {
+        width: 80%;
+    }
+    .address__link--edit a {
+        font-size: 16px;
+    }
+    .address__text p {
+        font-size: 16px;
+    }
+    .box__label,
+    .box__value {
+        font-size: 18px;
+    }
+    .purchase-form__btn {
+        font-size: 20px;
+    }
 }
