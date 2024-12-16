@@ -40,7 +40,7 @@
                             <h3>配送先</h3>
                         </div>
                         <div class="address__link--edit">
-                            <a href="">変更する</a>
+                            <a href="{{ route('address.create', $item->id) }}">変更する</a>
                         </div>
                     </div>
                     <div class="address__text">

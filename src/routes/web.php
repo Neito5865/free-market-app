@@ -10,6 +10,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\SellProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\AddressesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,5 +88,7 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
     Route::prefix('purchase')->group(function(){
         // 購入画面の表示
         Route::get('{id}', [PurchaseController::class, 'show'])->name('purchase.show');
+        // 送付先変更画面の表示
+        Route::get('address/{id}', [AddressesController::class, 'create'])->name('address.create');
     });
 });
