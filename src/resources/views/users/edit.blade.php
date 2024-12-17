@@ -38,11 +38,11 @@
                 </div>
                 <div class="profile-form__group">
                     <div class="profile-form__group--content">
-                        <label class="profile-form__label" for="postCode">郵便番号</label>
-                        <input class="profile-form__input" type="text" name="postCode" id="postCode" value="{{ old('postCode', $user->postCode) }}">
+                        <label class="profile-form__label" for="post_code">郵便番号</label>
+                        <input class="profile-form__input" type="text" name="post_code" id="post_code" value="{{ old('post_code', $user->post_code) }}">
                     </div>
                     <div class="profile-form__error">
-                        @error('postCode')
+                        @error('post_code')
                         {{ $message }}
                         @enderror
                     </div>

@@ -25,11 +25,11 @@
                 </div>
                 <div class="address-form__group">
                     <div class="address-form__group--content">
-                        <label class="address-form__label" for="postCode">郵便番号</label>
-                        <input class="address-form__input" type="text" name="postCode" id="postCode" value="{{ old('address') }}">
+                        <label class="address-form__label" for="post_code">郵便番号</label>
+                        <input class="address-form__input" type="text" name="post_code" id="post_code" value="{{ old('post_code') }}">
                     </div>
                     <div class="address-form__error">
-                        @error('postCode')
+                        @error('post_code')
                         {{ $message }}
                         @enderror
                     </div>

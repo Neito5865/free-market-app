@@ -41,6 +41,16 @@ class Item extends Model
         return $this->belongsToMany(Category::class, 'item_category');
     }
 
+    public function purchase()
+    {
+        return $this->hasOne(Purchase::class);
+    }
+
+    public function address()
+    {
+        return $this->hasOneThrough(Address::class, Purchase::class, 'item_id', 'id', 'id', 'address_id');
+    }
+
     public function favoriteUsers(){
         return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id')->withTimestamps();
     }

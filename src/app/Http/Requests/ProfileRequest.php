@@ -26,7 +26,7 @@ class ProfileRequest extends FormRequest
         return [
             'image' => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'name' => 'required|string|max:40',
-            'postCode' => 'nullable|regex:/^\d{3}-\d{4}$/',
+            'post_code' => 'nullable|regex:/^\d{3}-\d{4}$/',
             'address' => 'nullable|string',
             'building' => 'nullable|string',
         ];
@@ -40,7 +40,7 @@ class ProfileRequest extends FormRequest
             'name.required' => 'お名前を入力してください',
             'name.string' => 'お名前は文字列で入力してください',
             'name.max' => 'お名前は40文字以内で入力してください',
-            'postCode.regex' => '郵便番号は「123-4567」の形式で入力してください',
+            'post_code.regex' => '郵便番号は「123-4567」の形式で入力してください',
             'address.string' => '住所は文字列で入力してください',
             'building.string' => '建物名は文字列で入力してください',
         ];

@@ -21,7 +21,7 @@ class UsersController extends Controller
         $user = Auth::user();
         $userData = $request->only([
             'name',
-            'postCode',
+            'post_code',
             'address',
             'building',
         ]);
@@ -60,7 +60,7 @@ class UsersController extends Controller
         $user = Auth::user();
         $userData = $request->only([
             'name',
-            'postCode',
+            'post_code',
             'address',
             'building',
         ]);

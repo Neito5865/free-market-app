@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
                 'email' => 'user' . $i . '@example.com',
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('password'),
-                'postCode' => '999-9999',
+                'post_code' => '999-9999',
                 'address' => 'テスト県テスト市テスト' . $i . '-' . $i . '-' . $i,
                 'building' => 'テストマンション' . $i,
                 'image' => 'profile-img/person-default.png',

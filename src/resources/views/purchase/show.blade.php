@@ -26,7 +26,7 @@
                         <h3>支払い方法</h3>
                     </div>
                     <div class="payment__select">
-                        <select name="paymentMethod" id="payment-select">
+                        <select name="payment_method" id="payment-select">
                             <option value="" disabled selected>選択してください</option>
                             <option value="1">コンビニ払い</option>
                             <option value="2">カード支払い</option>
@@ -45,11 +45,11 @@
                     </div>
                     <div class="address__text">
                         @if (session('selected_address'))
-                            <p>〒 {{ session('selected_address')['postCode'] }}</p>
+                            <p>〒 {{ session('selected_address')['post_code'] }}</p>
                             <p>{{ session('selected_address')['address'] }}</p>
                             <p>{{ session('selected_address')['building'] ?? '' }}</p>
                         @elseif ($user->postCode || $user->address)
-                            <p>〒 {{ $user->postCode ?? '未登録'}}</p>
+                            <p>〒 {{ $user->post_code ?? '未登録'}}</p>
                             <p>{{ $user->address ?? '未登録'}}</p>
                             <p>{{ $user->building ?? ''}}</p>
                         @else
