@@ -10,7 +10,7 @@
             <h2>住所の変更</h2>
         </div>
         <div class="address__form">
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('address.store', ['id' => $item->id]) }}">
                 @csrf
                 <div class="address-form__group">
                     <div class="address-form__group--content">

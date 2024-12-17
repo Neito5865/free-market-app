@@ -45,10 +45,12 @@
                     </div>
                     <div class="address__text">
                         @if (session('selected_address'))
-                            <p>〒 {{ session('selected_address')['post_code'] }}</p>
-                            <p>{{ session('selected_address')['address'] }}</p>
-                            <p>{{ session('selected_address')['building'] ?? '' }}</p>
-                        @elseif ($user->postCode || $user->address)
+                            <p>{{ session('selected_address.name') }}</p>
+                            <p>〒 {{ session('selected_address.post_code') }}</p>
+                            <p>{{ session('selected_address.address') }}</p>
+                            <p>{{ session('selected_address.building') }}</p>
+                        @elseif ($user->post_code || $user->address)
+                            <p>{{ $user->name }}</p>
                             <p>〒 {{ $user->post_code ?? '未登録'}}</p>
                             <p>{{ $user->address ?? '未登録'}}</p>
                             <p>{{ $user->building ?? ''}}</p>

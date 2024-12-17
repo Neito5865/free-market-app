@@ -44,7 +44,6 @@ Route::get('/register', function () {
 })->name('register');
 Route::post('/register', [RegisterController::class, 'create'])->name('create.register');
 
-
 // トップページ
 Route::get('/', [ItemsController::class, 'index'])->name('item.index');
 // 商品詳細ページ
@@ -90,5 +89,7 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
         Route::get('{id}', [PurchaseController::class, 'show'])->name('purchase.show');
         // 送付先変更画面の表示
         Route::get('address/{id}', [AddressesController::class, 'create'])->name('address.create');
+        // 送付先変更の入力情報を保存
+        Route::post('address/{id}', [AddressesController::class, 'store'])->name('address.store');
     });
 });
