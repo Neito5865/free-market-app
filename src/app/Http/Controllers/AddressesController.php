@@ -23,6 +23,6 @@ class AddressesController extends Controller
         Session::put('selected_address', $request->only([
             'name', 'post_code', 'address', 'building'
         ]));
-        return redirect()->route('purchase.show', ['id' => $id]);
+        return redirect()->route('purchase.create', ['id' => $id]);
     }
 }
