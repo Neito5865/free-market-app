@@ -1,3 +1,15 @@
+.message__success {
+    background-color: #caf8e8;
+    font-size: 18px;
+    color: #2f5e4e;
+    margin: 20px auto 0 auto;
+    width: 95%;
+    max-width: 1360px;
+    margin: 20px auto 0 auto;
+    padding: 10px 0 10px 20px;
+    border-radius: 5px;
+}
+
 .tabs__labels{
     display: flex;
     justify-content: flex-start;

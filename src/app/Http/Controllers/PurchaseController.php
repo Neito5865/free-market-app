@@ -27,17 +27,21 @@ class PurchaseController extends Controller
     {
         $item = Item::find($id);
         if (!$item) {
-            return response()->view('errors.error-page', ['message' => '該当の商品が存在しません。'], 404);
+            return response()->view('errors.error-page', ['message' => '該当の商品が見つかりません。'], 404);
         }
 
-        // 支払い方法をセッションに保存
         session(['selected_payment_method' => $request->input('payment_method')]);
 
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         try {
             $session = \Stripe\Checkout\Session::create([
-                'payment_method_types' => ['card'],
+                'payment_method_types' => ['card', 'konbini'],
+                'payment_method_options' => [
+                    'konbini' => [
+                        'expires_after_days' => 7,
+                    ],
+                ],
                 'line_items' => [[
                     'price_data' => [
                         'currency' => 'jpy',
@@ -49,11 +53,11 @@ class PurchaseController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => route('purchase.completed'),
-                'cancel_url' => route('purchase.create', $id),
-                ]);
+                'success_url' => route('purchase.completed', ['id' => $id]),
+                'cancel_url' => route('purchase.create', ['id' => $id]),
+            ]);
 
-                return redirect($session->url);
+            return redirect($session->url);
         } catch (\Exception $e) {
             return back()->with('error', '決済に失敗しました: ' . $e->getMessage());
         }
@@ -70,6 +74,15 @@ class PurchaseController extends Controller
         $addressData = session('selected_address');
         $paymentMethod = session('selected_payment_method');
 
+        if (!$addressData) {
+            $addressData = [
+                'name' => $user->name,
+                'post_code' => $user->post_code,
+                'address' => $user->address,
+                'building' => $user->building,
+            ];
+        }
+
         $address = Address::create([
             'name' => $addressData['name'],
             'post_code' => $addressData['post_code'],
@@ -77,7 +90,7 @@ class PurchaseController extends Controller
             'building' => $addressData['building'],
         ]);
 
-        Purchase::create([
+        $purchase = Purchase::create([
             'user_id' => $user->id,
             'item_id' => $item->id,
             'address_id' => $address->id,
@@ -87,6 +100,6 @@ class PurchaseController extends Controller
         session()->forget('selected_address');
         session()->forget('selected_payment_method');
 
-        return redirect()->route('item.index')->with('success', '購入が完了しました');
+        return redirect()->route('item.index')->with('successMessage', '購入が完了しました');
     }
 }

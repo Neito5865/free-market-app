@@ -5,6 +5,11 @@
 @endsection
 
 @section('content')
+    @if (session('successMessage'))
+        <div class="message__success">
+            {{ session('successMessage') }}
+        </div>
+    @endif
     <div class="index__container">
         <div class="tabs">
             <div class="tabs__labels">

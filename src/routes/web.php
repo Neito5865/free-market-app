@@ -94,6 +94,6 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
         // 購入の処理
         Route::post('payment/{id}', [PurchaseController::class, 'payment'])->name('purchase.payment');
         // 購入後のページ
-        Route::get('completed', [PurchaseController::class, 'completed'])->name('purchase.completed');
+        Route::get('completed/{id}', [PurchaseController::class, 'completed'])->name('purchase.completed');
     });
 });

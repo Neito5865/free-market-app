@@ -5,16 +5,15 @@
 @endsection
 
 @section('content')
-
-        @if (count($errors) > 0)
-            <div class="purchase-error">
-                <ul class="alert-error">
-                    @foreach ($errors->all() as $error)
-                        <li class="alert-error__item">{{$error}}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    @if (count($errors) > 0)
+        <div class="purchase-error">
+            <ul class="alert-error">
+                @foreach ($errors->all() as $error)
+                    <li class="alert-error__item">{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="purchase__content">
         <div class="purchase__inner-f">
             <div class="purchase__left">
@@ -125,15 +124,12 @@
                     paymentText = 'カード支払い';
                 }
 
-                // 小計窓に反映
                 selectedPaymentMethod.textContent = paymentText;
-
-                // hiddenフィールドに値を設定
                 hiddenPaymentMethod.value = selectedValue;
             });
 
             if (paymentSelect.value) {
-            paymentSelect.dispatchEvent(new Event('change'));
+                paymentSelect.dispatchEvent(new Event('change'));
             }
         });
 
