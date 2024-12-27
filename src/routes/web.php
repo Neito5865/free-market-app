@@ -11,6 +11,7 @@ use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\SellProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AddressesController;
+use App\Http\Controllers\StripeWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,9 @@ Route::post('/register', [RegisterController::class, 'create'])->name('create.re
 Route::get('/', [ItemsController::class, 'index'])->name('item.index');
 // 商品詳細ページ
 Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
+
+// Stripe Webhook
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
 // ログイン後
 Route::middleware(['auth', 'verified.email'])->group(function() {

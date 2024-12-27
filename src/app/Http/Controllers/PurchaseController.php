@@ -55,6 +55,14 @@ class PurchaseController extends Controller
                 'mode' => 'payment',
                 'success_url' => route('purchase.completed', ['id' => $id]),
                 'cancel_url' => route('purchase.create', ['id' => $id]),
+                'metadata' => [
+                    'user_id' => Auth::id(),
+                    'item_id' => $item->id,
+                    'name' => $request->input('name'),
+                    'post_code' => $request->input('post_code'),
+                    'address' => $request->input('address'),
+                    'building' => $request->input('building'),
+                ],
             ]);
 
             return redirect($session->url);
