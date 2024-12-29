@@ -10,47 +10,60 @@ use App\Models\Item;
 
 class StripeWebhookController extends Controller
 {
-    public function handleWebhook(Request $request)
+    public function handle(Request $request)
     {
         Log::info('Webhook received', ['payload' => $request->all()]);
 
-        try {
-            $payload = $request->getContent();
-            $sigHeader = $request->header('Stripe-Signature');
-            $secret = config('services.stripe.webhook_secret');
+    try {
+        $payload = $request->getContent();
+        $sigHeader = $request->header('Stripe-Signature');
+        $secret = config('services.stripe.webhook_secret');
 
-            $event = \Stripe\Webhook::constructEvent(
-                $payload, $sigHeader, $secret
-            );
+        // Webhookの署名検証
+        $event = \Stripe\Webhook::constructEvent(
+            $payload, $sigHeader, $secret
+        );
 
-            Log::info('Webhook successfully verified', ['event' => $event]);
+        Log::info('Webhook successfully verified', ['event' => $event]);
 
-        } catch (\UnexpectedValueException $e) {
-            return response('Invalid payload', 400);
-        } catch (\Stripe\Exception\SignatureVerificationException $e) {
-            return response('Invalid signature', 400);
+        // イベントタイプごとの処理
+        if ($event->type === 'checkout.session.completed') {
+            $this->handleSuccessfulPayment($event->data->object);
+        } elseif ($event->type === 'payment_intent.succeeded') {
+            // 必要なら他のイベントも処理
+            Log::info('Payment intent succeeded', ['event' => $event]);
         }
 
-        // 決済成功イベントを処理
-        if ($event->type == 'checkout.session.completed') {
-            $session = $event->data->object;
+    } catch (\UnexpectedValueException $e) {
+        Log::error('Invalid payload', ['error' => $e->getMessage()]);
+        return response('Invalid payload', 400);
+    } catch (\Stripe\Exception\SignatureVerificationException $e) {
+        Log::error('Invalid signature', ['error' => $e->getMessage()]);
+        return response('Invalid signature', 400);
+    } catch (\Exception $e) {
+        Log::error('Webhook processing error', ['error' => $e->getMessage()]);
+        return response('Webhook processing error', 400);
+    }
 
-            // コンビニ払いが完了しているかチェック
-            if ($session->payment_status === 'paid') {
-                $this->handleSuccessfulPayment($session);
-                Log::info('Payment processing completed', ['session' => $session]);
-            } else {
-                Log::warning('Payment status is not paid', ['status' => $session->payment_status]);
-            }
-        }
-        return response('Webhook Handled', 200);
+    return response('Webhook Handled', 200);
     }
 
     protected function handleSuccessfulPayment($session)
     {
-        // セッションIDなどを元に購入データを保存
-        $itemId = $session->metadata->item_id ?? null;
+        Log::info('Session Object', ['session' => $session]);
+
+        $itemId = $session->metadata->item_id ?? null; // item_idを取得
         $userId = $session->metadata->user_id ?? null;
+
+        if (!$itemId || !$userId) {
+            Log::error('Metadata is missing or incomplete', ['metadata' => $session->metadata]);
+            return;
+        }
+
+        if (!$itemId || !$userId) {
+            Log::error('Metadata is missing or incomplete', ['metadata' => $session->metadata]);
+            return;
+        }
 
         $item = Item::find($itemId);
 
@@ -66,10 +79,13 @@ class StripeWebhookController extends Controller
                 'user_id' => $userId,
                 'item_id' => $item->id,
                 'address_id' => $address->id,
-                'payment_method' => 1,
+                'payment_method' => 'konbini', // 支払い方法
             ]);
 
-            Log::info('Processing successful payment', ['session_id' => $session->id]);
+            Log::info('Purchase and Address records created', [
+                'purchase' => $purchase,
+                'address' => $address,
+            ]);
         } else {
             Log::error("Item not found for ID $itemId");
         }

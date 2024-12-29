@@ -51,7 +51,7 @@ Route::get('/', [ItemsController::class, 'index'])->name('item.index');
 Route::get('item/{id}', [ItemsController::class, 'show'])->name('item.show');
 
 // Stripe Webhook
-Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])->name('stripe.webhook');
 
 // ログイン後
 Route::middleware(['auth', 'verified.email'])->group(function() {
