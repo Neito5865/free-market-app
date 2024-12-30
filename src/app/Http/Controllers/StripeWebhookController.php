@@ -12,7 +12,7 @@ class StripeWebhookController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::info('Webhook received', ['payload' => $request->all()]);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
     try {
         $payload = $request->getContent();
@@ -23,8 +23,6 @@ class StripeWebhookController extends Controller
         $event = \Stripe\Webhook::constructEvent(
             $payload, $sigHeader, $secret
         );
-
-        Log::info('Webhook successfully verified', ['event' => $event]);
 
         // イベントタイプごとの処理
         if ($event->type === 'checkout.session.completed') {
@@ -52,18 +50,8 @@ class StripeWebhookController extends Controller
     {
         Log::info('Session Object', ['session' => $session]);
 
-        $itemId = $session->metadata->item_id ?? null; // item_idを取得
+        $itemId = $session->metadata->item_id ?? null;
         $userId = $session->metadata->user_id ?? null;
-
-        if (!$itemId || !$userId) {
-            Log::error('Metadata is missing or incomplete', ['metadata' => $session->metadata]);
-            return;
-        }
-
-        if (!$itemId || !$userId) {
-            Log::error('Metadata is missing or incomplete', ['metadata' => $session->metadata]);
-            return;
-        }
 
         $item = Item::find($itemId);
 
@@ -79,12 +67,7 @@ class StripeWebhookController extends Controller
                 'user_id' => $userId,
                 'item_id' => $item->id,
                 'address_id' => $address->id,
-                'payment_method' => 'konbini', // 支払い方法
-            ]);
-
-            Log::info('Purchase and Address records created', [
-                'purchase' => $purchase,
-                'address' => $address,
+                'payment_method' => 1, // 支払い方法
             ]);
         } else {
             Log::error("Item not found for ID $itemId");

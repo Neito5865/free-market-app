@@ -25,6 +25,7 @@ class PurchaseController extends Controller
 
     public function payment(PurchaseRequest $request, $id)
     {
+        $user = Auth::user();
         $item = Item::find($id);
         if (!$item) {
             return response()->view('errors.error-page', ['message' => '該当の商品が見つかりません。'], 404);
@@ -33,6 +34,26 @@ class PurchaseController extends Controller
         session(['selected_payment_method' => $request->input('payment_method')]);
 
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $selectedAddress = session('selected_address', null);
+
+        if (!$selectedAddress) {
+            $selectedAddress = [
+                'name' => $user->name,
+                'post_code' => $user->post_code,
+                'address' => $user->address,
+                'building' => $user->building,
+            ];
+        }
+
+        $metadata = [
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'name' => $selectedAddress['name'],
+            'post_code' => $selectedAddress['post_code'],
+            'address' => $selectedAddress['address'],
+            'building' => $selectedAddress['building'],
+        ];
 
         try {
             $session = \Stripe\Checkout\Session::create([
@@ -55,14 +76,7 @@ class PurchaseController extends Controller
                 'mode' => 'payment',
                 'success_url' => route('purchase.completed', ['id' => $id]),
                 'cancel_url' => route('purchase.create', ['id' => $id]),
-                'metadata' => [
-                    'user_id' => Auth::id(),
-                    'item_id' => $item->id,
-                    'name' => $request->input('name'),
-                    'post_code' => $request->input('post_code'),
-                    'address' => $request->input('address'),
-                    'building' => $request->input('building'),
-                ],
+                'metadata' => $metadata,
             ]);
 
             return redirect($session->url);
