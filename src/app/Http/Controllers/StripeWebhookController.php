@@ -69,6 +69,8 @@ class StripeWebhookController extends Controller
                 'address_id' => $address->id,
                 'payment_method' => 1, // 支払い方法
             ]);
+
+            session()->forget('selected_address');
         } else {
             Log::error("Item not found for ID $itemId");
         }
