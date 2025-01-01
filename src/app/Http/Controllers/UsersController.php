@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Purchase;
 use App\Http\Requests\ProfileRequest;
 
 class UsersController extends Controller
@@ -41,7 +42,8 @@ class UsersController extends Controller
         if ($tab === 'sell') {
             $items = $user->items()->orderBy('id', 'desc')->get();
         } elseif ($tab === 'buy') {
-            // ユーザーが購入した商品を取得
+            $purchases = $user->purchases()->orderBy('created_at', 'desc')->get();
+            $items = Item::whereIn('id', $purchases->pluck('item_id'))->get();
         } else {
             $items = $user->items()->orderBy('id', 'desc')->get();
         }
