@@ -10,6 +10,9 @@
         <div class="item-show__content-left">
             <div class="item-show__image">
                 <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}">
+                @if ($item->purchase)
+                    <div class="sold-overlay">SOLD</div>
+                @endif
             </div>
         </div>
         <div class="item-show__content-right">
@@ -38,7 +41,7 @@
                             @endif
                         @else
                             <div class="favorite-icon">
-                                <i class="fa-regular fa-star"></i>
+                                <a href="{{ route('login') }}"><i class="fa-regular fa-star"></i></a>
                             </div>
                         @endif
                         <small class="favorite-count">{{ $countFavorites }}</small>
@@ -51,7 +54,11 @@
                     </div>
                 </div>
                 <div class="item-show__purchase-btn">
-                    <a href="{{ route('purchase.create', $item->id) }}">購入手続きへ</a>
+                    @if ($item->purchase)
+                        <a class="disabled-purchase-btn" href="#" onclick="return false;">購入手続きへ</a>
+                    @else
+                        <a class="active-purchase-btn" href="{{ route('purchase.create', $item->id) }}">購入手続きへ</a>
+                    @endif
                 </div>
                 <div class="item-show__description">
                     <h3 class="description__header">商品説明</h3>

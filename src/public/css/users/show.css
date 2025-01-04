@@ -33,6 +33,7 @@
     height: 100%;
     object-fit: cover;
 }
+
 .profile__name{
     margin-right: 12vw;
 }
@@ -104,6 +105,7 @@
 .item-card__img {
     width: 100%;
     aspect-ratio: 1 / 1;
+    position: relative;
 }
 
 .item-card__img img {
@@ -111,6 +113,23 @@
     height: 100%;
     object-fit: cover;
     border-radius: 4px;
+}
+
+.sold-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    pointer-events: none;
 }
 
 .item-card__name p {

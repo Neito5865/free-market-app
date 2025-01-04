@@ -13,7 +13,7 @@ class ItemsController extends Controller
         $page = $request->query('page', 'recommend');
 
         if ($page === 'recommend') {
-            $itemsQuery = Item::orderBy('id', 'desc');
+            $itemsQuery = Item::with('purchase')->orderBy('id', 'desc');
             if (Auth::check()) {
                 $itemsQuery->where('user_id', '!=', Auth::id());
             }
@@ -25,7 +25,7 @@ class ItemsController extends Controller
                 $items = collect();
             }
         } else {
-            $items = Item::orderBy('id', 'desc')->get();
+            $items = Item::with('purchase')->orderBy('id', 'desc')->get();
         }
 
         return view('index', compact('page', 'items'));
@@ -33,7 +33,7 @@ class ItemsController extends Controller
 
     public function show($id)
     {
-        $item = Item::find($id);
+        $item = Item::with('purchase')->find($id);
         if (!$item) {
             return response()->view('errors.error-page', ['message' => 'ページを表示できません。'], 404);
         }

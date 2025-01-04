@@ -9,11 +9,11 @@ class FavoriteController extends Controller
     public function store(Request $request, $id)
     {
         \Auth::user()->favorite($id);
-        return redirect()->back()->withInput($request->all());
+        return redirect()->back();
     }
 
     public function destroy(Request $request, $id){
         \Auth::user()->unfavorite($id);
-        return redirect()->back()->withInput($request->all());
+        return redirect()->back();
     }
 }
