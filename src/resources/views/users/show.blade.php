@@ -14,7 +14,7 @@
         <div class="profile__content">
             <div class="profile-inner">
                 <div class="profile__image">
-                    <img src="{{ asset('storage/' . $user->image) }}" alt="プロフィール画像">
+                    <div class="profile-image-preview" id="profileImagePreview" style="background-image: url('{{ $user->image ? asset('storage/' . $user->image) : "" }}');"></div>
                 </div>
                 <div class="profile__name">
                     <p>{{ $user->name }}</p>

@@ -15,7 +15,7 @@
                 @method('PUT')
                 <div class="profile-form__group">
                     <div class="profile-form__group--content">
-                        <div class="profile-image-preview" id="profileImagePreview" style="background-image: url('{{ $user->image ? asset('storage/' . $user->image) : asset('storage/profile-img/person-default.png') }}');"></div>
+                        <div class="profile-image-preview" id="profileImagePreview" style="background-image: url('{{ $user->image ? asset('storage/' . $user->image) : "" }}');"></div>
                         <label class="profile-form__label--image" for="image">画像を選択する</label>
                         <input class="profile-form__input" id="image" type="file" name="image" accept="image/*">
                     </div>

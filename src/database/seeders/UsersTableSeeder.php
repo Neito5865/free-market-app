@@ -25,7 +25,6 @@ class UsersTableSeeder extends Seeder
                 'post_code' => '999-9999',
                 'address' => 'テスト県テスト市テスト' . $i . '-' . $i . '-' . $i,
                 'building' => 'テストマンション' . $i,
-                'image' => 'profile-img/person-default.png',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
