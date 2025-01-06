@@ -12,6 +12,7 @@ use App\Http\Controllers\SellProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------

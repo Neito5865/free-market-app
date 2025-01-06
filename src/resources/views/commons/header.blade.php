@@ -5,9 +5,10 @@
                 <h1><a href="{{ route('item.index') }}"><img src="/images/logo.svg" alt="COACHTECH"></a></h1>
             </div>
             <div class="header__search-form">
-                <form class="search-form" method="" action="">
+                <form class="search-form" method="GET" action="{{ route('item.index') }}">
                     @csrf
                     <input class="search-form__item-input" type="text" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
+                    <input type="hidden" name="page" value="{{ request('page', 'recommend') }}">
                 </form>
             </div>
             <div class="header__nav">

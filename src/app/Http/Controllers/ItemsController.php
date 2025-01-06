@@ -11,24 +11,35 @@ class ItemsController extends Controller
     public function index(Request $request)
     {
         $page = $request->query('page', 'recommend');
+        $keyword = $request->input('keyword');
+        $items = collect();
 
         if ($page === 'recommend') {
             $itemsQuery = Item::with('purchase')->orderBy('id', 'desc');
             if (Auth::check()) {
                 $itemsQuery->where('user_id', '!=', Auth::id());
             }
+            if (!empty($keyword)) {
+                $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
+            }
             $items = $itemsQuery->get();
         } elseif ($page === 'mylist') {
             if (Auth::check()) {
-                $items = Auth::user()->favorites()->withPivot('created_at')->orderBy('pivot_created_at', 'desc')->get();
-            } else {
-                $items = collect();
+                $itemsQuery = Auth::user()->favorites()->withPivot('created_at')->orderBy('pivot_created_at', 'desc');
+                if (!empty($keyword)) {
+                    $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
+                }
+                $items = $itemsQuery->get();
             }
         } else {
-            $items = Item::with('purchase')->orderBy('id', 'desc')->get();
+            $itemsQuery = Item::with('purchase')->orderBy('id', 'desc');
+            if (!empty($keyword)) {
+                $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
+            }
+            $items = $itemsQuery->get();
         }
 
-        return view('index', compact('page', 'items'));
+        return view('index', compact('page', 'items', 'keyword'));
     }
 
     public function show($id)
