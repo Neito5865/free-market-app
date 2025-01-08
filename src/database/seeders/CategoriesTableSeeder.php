@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CategoriesTableSeeder extends Seeder
 {
@@ -14,13 +15,33 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $file = fopen(storage_path('app/public/csv/categories.csv'), 'r');
+        $categories = [
+            'ファッション',
+            '家電',
+            'インテリア',
+            'レディース',
+            'メンズ',
+            'コスメ',
+            '本',
+            'ゲーム',
+            'スポーツ',
+            'キッチン',
+            'ハンドメイド',
+            'アクセサリー',
+            'おもちゃ',
+            'ベビー・キッズ',
+        ];
 
-        while (($data = fgetcsv($file)) !== FALSE) {
-            Category::create([
-                'category' => $data[1]
-            ]);
-        }
-        fclose($file);
+        $now = Carbon::now();
+
+        $data = array_map(function($category) use ($now) {
+            return [
+                'category' => $category,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }, $categories);
+
+        DB::table('categories')->insert($data);
     }
 }
