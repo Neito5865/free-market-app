@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Condition;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ConditionsTableSeeder extends Seeder
 {
@@ -14,13 +15,23 @@ class ConditionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $file = fopen(storage_path('app/public/csv/conditions.csv'), 'r');
+        $conditions = [
+            '良好',
+            '目立った傷や汚れなし',
+            'やや傷や汚れあり',
+            '状態が悪い',
+        ];
 
-        while (($data = fgetcsv($file)) !== FALSE) {
-            Condition::create([
-                'condition' => $data[1]
-            ]);
-        }
-        fclose($file);
+        $now = Carbon::now();
+
+        $data = array_map(function($condition) use ($now) {
+            return [
+                'condition' => $condition,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }, $conditions);
+
+        DB::table('conditions')->insert($data);
     }
 }
