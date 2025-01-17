@@ -21,7 +21,6 @@ class ItemsTableSeeder extends Seeder
         // コピーする先（storageのpublicディレクトリ）
         $destinationPath = storage_path('app/public/item-img');
 
-        // 画像データを定義
         $items = [
             [
                 'user_id' => 1,

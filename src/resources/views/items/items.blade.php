@@ -7,7 +7,7 @@
                     <a href="{{ route('item.show', $item->id) }}">
                         <div class="item-card__img">
                             <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}">
-                            @if ($item->purchase)
+                            @if ($item->purchase()->exists())
                                 <div class="sold-overlay">SOLD</div>
                             @endif
                         </div>

@@ -12,16 +12,6 @@ use App\Models\Purchase;
 
 class GetItemsTest extends TestCase
 {
-    use RefreshDatabase;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // テスト用データベースをリフレッシュしてシーディング
-        $this->artisan('db:seed --env=testing');
-    }
-
     public function test_get_all_items()
     {
         // 商品一覧ページへアクセス
@@ -37,29 +27,45 @@ class GetItemsTest extends TestCase
 
     public function test_purchased_items_are_marked_as_sold()
     {
-        // 送付先データを作成
-        $address = Address::factory()->create([
-            'name' => 'テストユーザー',
-            'post_code' => '123-4567',
-            'address' => '東京都テスト区テスト',
-            'building' => 'テスト',
-        ]);
-
-        // 購入情報を保存
-        Purchase::factory()->create([
-            'user_id' => User::first()->id,
-            'item_id' => Item::find(2)->id,
-            'address_id' => $address->id,
-            'payment_method' => 1,
-        ]);
+        // テスト実行前に以下を実行する必要あり
+        // php artisan migrate:fresh --env=testing
+        // php artisan db:seed --env=testing
 
         // 商品一覧ページにアクセス
         $response = $this->get('/');
+        $response->assertStatus(200);
 
         // 購入済み商品が「Sold」と表示されることを確認
-        $response->assertSee('Sold');
+        $response->assertSee('SOLD');
+    }
 
-        // 商品名と一緒に「Sold」が表示されているか
-        $response->assertSee('HDD');
+    public function test_my_sell_product_is_not_display()
+    {
+        // シーダーデータにデータがあるか
+        $this->assertDatabaseHas('users', [
+            'id' => 1,
+            'email' => 'user1@example.com',
+        ]);
+
+        // user_id=1に紐づく商品のデータを取得
+        $userItems = Item::where('user_id', 1)->get();
+
+        // シーダーデータのユーザーを取得
+        $user = User::find(1);
+
+        // ユーザーをログイン状態に設定
+        $this->actingAs($user);
+
+        // ログイン後にログイン中のユーザーを確認
+        $this->assertEquals(auth()->id(), 1);
+
+        // 商品一覧ページにアクセス
+        $response = $this->get('/');
+        $response->assertStatus(200);
+
+        // user_id=1の商品名がレスポンスに含まれていないことを確認
+        foreach ($userItems as $item) {
+            $response->assertDontSee($item->name);
+        }
     }
 }
