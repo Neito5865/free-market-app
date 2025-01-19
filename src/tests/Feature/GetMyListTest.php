@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
+use Illuminate\Support\Facades\Auth;
 
 class GetMyListTest extends TestCase
 {
@@ -36,7 +37,7 @@ class GetMyListTest extends TestCase
         $response = $this->get('/?page=mylist');
         $response->assertStatus(200);
 
-        // 他のユーザーがいいねした商品が表示されていることを確認
+        // ログインユーザーがいいねした商品が表示されていることを確認
         $response->assertSee($item->name);
     }
 
@@ -63,5 +64,45 @@ class GetMyListTest extends TestCase
 
         // 購入済み商品が「Sold」と表示されることを確認
         $response->assertSee('SOLD');
+    }
+
+    public function test_my_sell_product_not_display()
+    {
+        // user_id=1のユーザーを取得
+        $user = User::find(1);
+
+        // ユーザーをログイン状態に設定
+        $this->actingAs($user);
+
+        // user_id=1に紐づく商品のデータを取得
+        $userItems = Item::where('user_id', 1)->get();
+
+        // マイリストページへアクセス
+        $response = $this->get('/?page=mylist');
+        $response->assertStatus(200);
+
+        // user_id=1の商品名がレスポンスに含まれていないことを確認
+        foreach ($userItems as $item) {
+            $response->assertDontSee($item->name);
+
+        }
+    }
+
+    public function test_not_authenticated_is_not_display()
+    {
+        // ログアウトのリクエストを送信
+        $response = $this->post('/logout');
+
+        // ログアウトしたか確認
+        $this->assertFalse(Auth::check());
+
+        // マイリストページへアクセス
+        $response = $this->get('/?page=mylist');
+        $response->assertStatus(200);
+
+        // マイリストにメッセージが表示されていることを確認
+        $response->assertSee('該当する商品が見つかりませんでした。');
+        // 商品が表示されていないことを確認
+        $response->assertDontSee('<div class= "item-card">', false);
     }
 }
