@@ -187,15 +187,20 @@
 }
 .profile-img{
     width: 70px;
-    height: 70px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background-color: #d9d9d9;
+}
+
+.profile-image-preview {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
     border-radius: 50%;
     overflow: hidden;
 }
-.profile-img img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+
 .profile-name p{
     font-size: 24px;
     font-weight: 700;

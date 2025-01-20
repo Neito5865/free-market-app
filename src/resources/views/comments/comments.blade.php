@@ -6,7 +6,7 @@
         <div class="comment__about">
             <div class="profile-content-f">
                 <div class="profile-img">
-                    <img src="{{ asset('storage/' . $comment->user->image) }}" alt="プロフィール画像">
+                    <div class="profile-image-preview" id="profileImagePreview" style="background-image: url('{{ $comment->user->image ? asset('storage/' . $comment->user->image) : "" }}');"></div>
                 </div>
                 <div class="profile-name">
                     <p>{{ $comment->user->name }}</p>
