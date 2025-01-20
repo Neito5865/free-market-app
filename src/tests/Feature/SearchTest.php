@@ -32,7 +32,7 @@ class SearchTest extends TestCase
         $response->assertSee($matchingItem->name);
     }
 
-    public function test_mylist_keep_search_situation()
+    public function test_search_state_is_kept_in_mylist()
     {
         // テスト用の商品を作成
         $matchingItem = \App\Models\Item::create([
