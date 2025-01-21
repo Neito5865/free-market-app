@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class FavoriteTest extends TestCase
 {
+    // テスト実行前に以下を実行する必要あり
+    // php artisan migrate:fresh --env=testing
+    // php artisan db:seed --env=testing
+
     public function test_favorite()
     {
         // user_id=1のユーザーを取得
