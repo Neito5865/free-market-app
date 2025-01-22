@@ -22,7 +22,6 @@ class GetUserInformationTest extends TestCase
             'name' => 'テストユーザー1',
             'email' => 'test1@test.com',
             'password' => bcrypt('password'),
-            'email_verified_at' => now(),
             'image' => 'profile-img/test_user1.jpg'
         ]);
 
@@ -31,7 +30,6 @@ class GetUserInformationTest extends TestCase
             'name' => 'テストユーザー2',
             'email' => 'test2@test.com',
             'password' => bcrypt('password'),
-            'email_verified_at' => now(),
             'image' => 'profile-img/test_user2.jpg'
         ]);
 
