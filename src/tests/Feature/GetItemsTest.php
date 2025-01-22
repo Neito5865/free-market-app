@@ -12,6 +12,10 @@ use App\Models\Purchase;
 
 class GetItemsTest extends TestCase
 {
+    // テスト実行前に以下を実行する必要あり
+    // php artisan migrate:fresh --env=testing
+    // php artisan db:seed --env=testing
+
     public function test_get_all_items()
     {
         // 商品一覧ページへアクセス
@@ -27,10 +31,6 @@ class GetItemsTest extends TestCase
 
     public function test_purchased_items_are_marked_as_sold()
     {
-        // テスト実行前に以下を実行する必要あり
-        // php artisan migrate:fresh --env=testing
-        // php artisan db:seed --env=testing
-
         // 商品一覧ページにアクセス
         $response = $this->get('/');
         $response->assertStatus(200);
