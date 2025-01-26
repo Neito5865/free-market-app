@@ -89,16 +89,16 @@ Route::middleware(['auth', 'verified.email'])->group(function() {
     });
 
     // 購入関係
-    Route::prefix('purchase')->group(function(){
+    Route::prefix('purchase/{id}')->group(function(){
         // 購入画面の表示
-        Route::get('{id}', [PurchaseController::class, 'create'])->name('purchase.create');
+        Route::get('', [PurchaseController::class, 'create'])->name('purchase.create');
         // 送付先変更画面の表示
-        Route::get('address/{id}', [AddressesController::class, 'create'])->name('address.create');
+        Route::get('address', [AddressesController::class, 'create'])->name('address.create');
         // 送付先変更の入力情報を保存
-        Route::post('address/{id}', [AddressesController::class, 'store'])->name('address.store');
+        Route::post('address', [AddressesController::class, 'store'])->name('address.store');
         // 購入の処理
-        Route::post('payment/{id}', [PurchaseController::class, 'payment'])->name('purchase.payment');
+        Route::post('payment', [PurchaseController::class, 'payment'])->name('purchase.payment');
         // 購入後のページ
-        Route::get('completed/{id}', [PurchaseController::class, 'completed'])->name('purchase.completed');
+        Route::get('completed', [PurchaseController::class, 'completed'])->name('purchase.completed');
     });
 });
