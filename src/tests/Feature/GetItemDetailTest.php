@@ -14,8 +14,25 @@ use App\Models\Category;
 
 class GetItemDetailTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_all_information_of_item()
     {
+        // テストユーザー1を作成（商品出品ユーザー）
+        $user1 = User::factory()->create([
+            'name' => 'テストユーザー1',
+            'email' => 'test1@test.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        // テストユーザー2を作成（いいね・コメントをするユーザー）
+        $user2 = User::factory()->create([
+            'name' => 'テストユーザー2',
+            'email' => 'test2@test.com',
+            'password' => bcrypt('password'),
+            'image' => 'profile-img/test_user2.jpg'
+        ]);
+
         // テスト用の商品状態を作成
         $condition = Condition::create([
             'condition' => 'テストコンディション',
@@ -23,10 +40,10 @@ class GetItemDetailTest extends TestCase
 
         // テスト用の商品を作成
         $item = Item::create([
-            'name' => '検索対象商品A',
+            'name' => 'テスト商品',
             'price' => 1000,
             'description' => 'これはテスト用の商品です。',
-            'user_id' => 1,
+            'user_id' => $user1->id,
             'condition_id' => $condition->id,
             'brand' => 'テストブランド',
             'image' => 'item-img/test.jpg'
@@ -34,20 +51,13 @@ class GetItemDetailTest extends TestCase
 
         // テスト用のいいねレコードを作成
         DB::table('favorites')->insert([
-            'user_id' => 2,
+            'user_id' => $user2->id,
             'item_id' => $item->id
-        ]);
-        // コメントするユーザーを作成
-        $user = User::create([
-            'name' => 'テストユーザー',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-            'image' => 'profile-img/test_user.jpg'
         ]);
 
         // テスト用のコメントを作成
         $comment = Comment::create([
-            'user_id' => $user->id,
+            'user_id' => $user2->id,
             'item_id' => $item->id,
             'comment' => 'テストコメント'
         ]);
@@ -86,7 +96,7 @@ class GetItemDetailTest extends TestCase
         $response->assertSee($comment->user->name); // コメントしたユーザー名
 
         // コメントしたユーザー画像
-        $expectedStyle = "background-image: url('" . asset('storage/' . $user->image) . "');";
+        $expectedStyle = "background-image: url('" . asset('storage/' . $user2->image) . "');";
         $response->assertSee($expectedStyle, false);
 
         $response->assertSee($comment->comment); // コメント内容

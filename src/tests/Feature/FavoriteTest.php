@@ -7,24 +7,47 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Condition;
 use Illuminate\Support\Facades\DB;
 
 class FavoriteTest extends TestCase
 {
-    // テスト実行前に以下を実行する必要あり
-    // php artisan migrate:fresh --env=testing
-    // php artisan db:seed --env=testing
+    use RefreshDatabase;
 
     public function test_favorite()
     {
-        // user_id=1のユーザーを取得
-        $user = User::find(1);
+        // テストユーザー1を作成
+        $user1 = User::factory()->create([
+            'name' => 'テストユーザー1',
+            'email' => 'test1@test.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // item_id=5の商品を取得
-        $item = Item::find(5);
+        // テストユーザー2を作成
+        $user2 = User::factory()->create([
+            'name' => 'テストユーザー2',
+            'email' => 'test2@test.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // ログイン状態に設定する
-        $this->actingAs($user);
+        // テスト用の商品状態を作成
+        $condition = Condition::create([
+            'condition' => 'テストコンディション',
+        ]);
+
+        // ユーザー2の出品商品を作成
+        $item = Item::create([
+            'name' => 'テスト商品',
+            'price' => 1000,
+            'description' => 'これはテスト用の商品です。',
+            'user_id' => $user2->id,
+            'condition_id' => $condition->id,
+            'brand' => 'テストブランド',
+            'image' => 'item-img/test.jpg'
+        ]);
+
+        // ユーザー1をログイン状態に設定する
+        $this->actingAs($user1);
 
         // 商品詳細ページへアクセス
         $response = $this->get(route('item.show', $item->id));
@@ -53,14 +76,38 @@ class FavoriteTest extends TestCase
 
     public function test_favorite_icon_changes_when_favorited()
     {
-        // user_id=1のユーザーを取得
-        $user = User::find(2);
+        // テストユーザー1を作成
+        $user1 = User::factory()->create([
+            'name' => 'テストユーザー1',
+            'email' => 'test1@test.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // item_id=5の商品を取得
-        $item = Item::find(6);
+        // テストユーザー2を作成
+        $user2 = User::factory()->create([
+            'name' => 'テストユーザー2',
+            'email' => 'test2@test.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // ログイン状態に設定する
-        $this->actingAs($user);
+        // テスト用の商品状態を作成
+        $condition = Condition::create([
+            'condition' => 'テストコンディション',
+        ]);
+
+        // ユーザー2の出品商品を作成
+        $item = Item::create([
+            'name' => 'テスト商品',
+            'price' => 1000,
+            'description' => 'これはテスト用の商品です。',
+            'user_id' => $user2->id,
+            'condition_id' => $condition->id,
+            'brand' => 'テストブランド',
+            'image' => 'item-img/test.jpg'
+        ]);
+
+        // ユーザー1をログイン状態に設定する
+        $this->actingAs($user1);
 
         // 商品詳細ページへアクセス
         $response = $this->get(route('item.show', $item->id));
@@ -82,14 +129,44 @@ class FavoriteTest extends TestCase
 
     public function test_unfavorite()
     {
-        // user_id=1のユーザーを取得
-        $user = User::find(1);
+        // テストユーザー1を作成
+        $user1 = User::factory()->create([
+            'name' => 'テストユーザー1',
+            'email' => 'test1@test.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // item_id=5の商品を取得
-        $item = Item::find(5);
+        // テストユーザー2を作成
+        $user2 = User::factory()->create([
+            'name' => 'テストユーザー2',
+            'email' => 'test2@test.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // ログイン状態に設定する
-        $this->actingAs($user);
+        // テスト用の商品状態を作成
+        $condition = Condition::create([
+            'condition' => 'テストコンディション',
+        ]);
+
+        // ユーザー2の出品商品を作成
+        $item = Item::create([
+            'name' => 'テスト商品',
+            'price' => 1000,
+            'description' => 'これはテスト用の商品です。',
+            'user_id' => $user2->id,
+            'condition_id' => $condition->id,
+            'brand' => 'テストブランド',
+            'image' => 'item-img/test.jpg'
+        ]);
+
+        // いいねを登録済みの状態にする
+        DB::table('favorites')->insert([
+            'user_id' => $user1->id,
+            'item_id' => $item->id
+        ]);
+
+        // ユーザー1をログイン状態に設定する
+        $this->actingAs($user1);
 
         // 商品詳細ページへアクセス
         $response = $this->get(route('item.show', $item->id));
