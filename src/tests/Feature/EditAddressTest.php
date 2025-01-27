@@ -17,19 +17,6 @@ class EditAddressTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Stripeセッションのモック化
-        $mock = Mockery::mock('alias:' . StripeSession::class);
-        $mock->shouldReceive('create')
-            ->once()
-            ->andReturn((object)[
-                'url' => 'https://checkout.stripe.com/mock-session',
-            ]);
-    }
-
     public function test_address_is_update_on_purchase_display()
     {
         // テストユーザー1を作成
@@ -103,7 +90,17 @@ class EditAddressTest extends TestCase
         ]);
     }
 
-    public function test_purchased_item_and_address_are_linked(){
+    public function test_purchased_item_and_address_are_linked()
+    {
+        // Stripeのモックを設定
+        $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
+        $stripeSessionMock
+            ->shouldReceive('create')
+            ->once()
+            ->andReturn((object)[
+                'url' => 'https://checkout.stripe.com/mock-session'
+            ]);
+
         // テストユーザー1を作成（購入者）
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
@@ -156,15 +153,23 @@ class EditAddressTest extends TestCase
 
         // 商品購入のリクエストを送信
         $response = $this->post(route('purchase.payment', $item->id), [
-            'payment_method' => 2
+            'payment_method' => 2,
+            'selected_address' => [
+                'name' => 'テスト宛名',
+                'post_code' => '111-1111',
+                'address' => 'テスト県テスト市テスト区テスト1-1-1',
+                'building' => 'テストマンション',
+            ],
         ]);
 
-        // Stripeリダイレクトが行われることを確認
+        // モックしたリダイレクトURLが使われているか確認
         $response->assertRedirectContains('https://checkout.stripe.com/mock-session');
 
-        // 購入完了後
+        // 購入完了後にアクセス
         $response = $this->get(route('purchase.completed', $item->id));
-        $response->assertStatus(200);
+
+        // トップページへのリダイレクトを確認
+        $response->assertRedirect(route('item.index'));
 
         // 購入情報がデータベースに保存されているか確認
         $this->assertDatabaseHas('addresses', [
@@ -181,11 +186,5 @@ class EditAddressTest extends TestCase
             'address_id' => Address::where('name', 'テスト宛名')->first()->id,
             'payment_method' => 2, // クレジットカード
         ]);
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close(); // Mockeryを正しく終了させる
-        parent::tearDown(); // 親クラスのtearDownを呼び出す
     }
 }

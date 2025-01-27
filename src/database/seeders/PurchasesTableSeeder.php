@@ -20,7 +20,7 @@ class PurchasesTableSeeder extends Seeder
                 'user_id' => $i,
                 'item_id' => $i + 1,
                 'address_id' => $i,
-                'payment_method' => 1,
+                'payment_method' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
