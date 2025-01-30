@@ -25,7 +25,11 @@ class ItemsController extends Controller
             $items = $itemsQuery->get();
         } elseif ($page === 'mylist') {
             if (Auth::check()) {
-                $itemsQuery = Auth::user()->favorites()->withPivot('created_at')->orderBy('pivot_created_at', 'desc');
+                $itemsQuery = Auth::user()->favorites()
+                    ->where('items.user_id', '!=', Auth::id())
+                    ->withPivot('created_at')
+                    ->orderBy('pivot_created_at', 'desc');
+
                 if (!empty($keyword)) {
                     $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
                 }
