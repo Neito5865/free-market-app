@@ -115,7 +115,7 @@ php artisan db:seed
 ## ER図
 ![er drawio](https://github.com/user-attachments/assets/94f17325-ef9b-4e55-a3e3-114489b46f1d)
 
-## 開発環境
+## 開発環境（URL）
  - トップページ：http://localhost
  - ユーザー登録：http://localhost/register
  - phpMyAdmin：http://localhost:8080
