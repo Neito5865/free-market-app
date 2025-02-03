@@ -52,12 +52,12 @@
                 </div>
                 <div class="item-create-form__group">
                     <div class="item-create-form__group--content">
-                        <label class="item-create-form__label" for="condition">商品の状態</label>
+                        <label class="item-create-form__label" for="condition-select">商品の状態</label>
                         <div class="condition-select">
-                            <select class="item-create-form__select" name="condition_id" id="condition">
-                                <option value="">選択してください</option>
+                            <select class="item-create-form__select" name="condition_id" id="condition-select">
+                                <option value="" disabled {{ old('condition_id') ? '' : 'selected' }}>選択してください</option>
                                 @foreach ($conditions as $condition)
-                                    <option value="{{ $condition->id }}" {{ old('condition') ? 'selected' : '' }}>{{ $condition->condition }}</option>
+                                    <option value="{{ $condition->id }}" {{ old('condition_id') ? 'selected' : '' }}>{{ $condition->condition }}</option>
                                 @endforeach
                             </select>
                             <div class="triangle"></div>
@@ -145,6 +145,29 @@
             } else {
                 previewContainer.innerHTML = '';
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const conditionSelect = document.getElementById('condition-select');
+
+            let firstOption = conditionSelect.querySelector('option[value=""]');
+
+            const oldConditionId = "{{ old('condition_id') }}";
+
+            if (oldConditionId) {
+                conditionSelect.value = oldConditionId;
+            }
+
+            conditionSelect.addEventListener('focus', function() {
+                if (firstOption) {
+                    firstOption.remove();
+                    firstOption = null;
+
+                    if (!oldConditionId) {
+                        conditionSelect.selectedIndex = -1;
+                    }
+                }
+            });
         });
     </script>
 @endsection

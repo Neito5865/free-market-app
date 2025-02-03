@@ -106,18 +106,22 @@
             const selectedPaymentMethod = document.getElementById('selected-payment-method');
             const hiddenPaymentMethod = document.getElementById('hidden-payment-method');
 
-            paymentSelect.addEventListener('mousedown', function () {
-                const firstOption = this.querySelector('option[value=""]');
+            let firstOption = paymentSelect.querySelector('option[value=""]');
+
+            paymentSelect.addEventListener('focus', function () {
                 if (firstOption) {
                     firstOption.remove(); // 「選択してください」を削除
+                    firstOption = null;  // 一度削除したら再度削除しないようにする
+
+                    // 選択状態をリセットして、再選択を強制する
+                    paymentSelect.selectedIndex = -1;
                 }
             });
 
             paymentSelect.addEventListener('change', function () {
                 const selectedValue = this.value;
-
-                // 表示用テキストを更新
                 let paymentText = '';
+
                 if (selectedValue === '1') {
                     paymentText = 'コンビニ払い';
                 } else if (selectedValue === '2') {
