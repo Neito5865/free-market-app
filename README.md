@@ -118,4 +118,13 @@ php artisan db:seed
 ## 開発環境（URL）
  - トップページ：http://localhost
  - ユーザー登録：http://localhost/register
+ - MailHog：http://localhost:8025
  - phpMyAdmin：http://localhost:8080
+
+## その他
+ - 以下のユーザー情報でログイン可能。
+ メールアドレス：user1@example.com  
+ パスワード：password
+
+ - テストケース「支払い方法選択機能」について  
+ JavaScriptで実装のため、目視確認。

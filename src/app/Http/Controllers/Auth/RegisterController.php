@@ -11,7 +11,7 @@ use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $this->validator($request->all())->validate();
 

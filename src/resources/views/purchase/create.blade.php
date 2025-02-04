@@ -110,10 +110,8 @@
 
             paymentSelect.addEventListener('focus', function () {
                 if (firstOption) {
-                    firstOption.remove(); // 「選択してください」を削除
-                    firstOption = null;  // 一度削除したら再度削除しないようにする
-
-                    // 選択状態をリセットして、再選択を強制する
+                    firstOption.remove();
+                    firstOption = null;
                     paymentSelect.selectedIndex = -1;
                 }
             });
