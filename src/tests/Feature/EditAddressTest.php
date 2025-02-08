@@ -12,6 +12,7 @@ use App\Models\Purchase;
 use App\Models\Address;
 use Mockery;
 use Stripe\Checkout\Session as StripeSession;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class EditAddressTest extends TestCase
 {
@@ -19,6 +20,8 @@ class EditAddressTest extends TestCase
 
     public function test_address_is_update_on_purchase_display()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
@@ -92,6 +95,8 @@ class EditAddressTest extends TestCase
 
     public function test_purchased_item_and_address_are_linked()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock

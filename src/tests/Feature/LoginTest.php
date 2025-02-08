@@ -7,14 +7,16 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    // メールアドレスが入力されていない場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_email_is_missing()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
@@ -34,9 +36,10 @@ class LoginTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    // パスワードが入力されていない場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_password_is_missing()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
@@ -59,6 +62,8 @@ class LoginTest extends TestCase
     // 登録情報にない情報が入力された場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_not_in_registration()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
@@ -82,6 +87,8 @@ class LoginTest extends TestCase
     // 正しい情報が入力された場合、ログインが実行される
     public function test_login()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テスト用のユーザーを作成
         $user = User::factory()->create([
             'email' => 'test@example.com',

@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\Condition;
 use App\Models\Category;
 use Illuminate\Http\UploadedFile;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class SellProductTest extends TestCase
 {
@@ -17,6 +18,8 @@ class SellProductTest extends TestCase
 
     public function test_item_can_be_created_successfully()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザーを作成
         $user = User::factory()->create([
             'name' => 'テストユーザー',

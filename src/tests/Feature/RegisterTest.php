@@ -5,14 +5,16 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
 
-    // 名前が入力されていない場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_name_is_missing()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // 会員登録ページへアクセス
         $response = $this->get('/register');
         $response->assertStatus(200);
@@ -34,9 +36,10 @@ class RegisterTest extends TestCase
         $response->assertRedirect('/register');
     }
 
-    // メールアドレスが入力されていない場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_email_is_missing()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // 会員登録ページへアクセス
         $response = $this->get('/register');
         $response->assertStatus(200);
@@ -58,9 +61,10 @@ class RegisterTest extends TestCase
         $response->assertRedirect('/register');
     }
 
-    // パスワードが入力されていない場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_password_is_missing()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // 会員登録ページへアクセス
         $response = $this->get('/register');
         $response->assertStatus(200);
@@ -81,9 +85,10 @@ class RegisterTest extends TestCase
         $response->assertRedirect('/register');
     }
 
-    // パスワードが7文字以下の場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_password_is_under7()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // 会員登録ページへアクセス
         $response = $this->get('/register');
         $response->assertStatus(200);
@@ -106,9 +111,10 @@ class RegisterTest extends TestCase
         $response->assertRedirect('/register');
     }
 
-    // パスワードと確認用パスワードと一致しない場合、バリデーションメッセージが表示される
     public function test_shows_validation_message_when_password_not_match()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // 会員登録ページへアクセス
         $response = $this->get('/register');
         $response->assertStatus(200);
@@ -131,9 +137,10 @@ class RegisterTest extends TestCase
         $response->assertRedirect('/register');
     }
 
-    // 会員登録され、ログイン画面に遷移
     public function test_create_user()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // 会員登録ページへアクセス
         $response = $this->get('/register');
         $response->assertStatus(200);

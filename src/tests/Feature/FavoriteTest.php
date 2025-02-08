@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Item;
 use App\Models\Condition;
 use Illuminate\Support\Facades\DB;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class FavoriteTest extends TestCase
 {
@@ -16,6 +17,8 @@ class FavoriteTest extends TestCase
 
     public function test_favorite()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
@@ -76,6 +79,8 @@ class FavoriteTest extends TestCase
 
     public function test_favorite_icon_changes_when_favorited()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
@@ -129,6 +134,8 @@ class FavoriteTest extends TestCase
 
     public function test_unfavorite()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',

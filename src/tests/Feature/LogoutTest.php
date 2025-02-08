@@ -7,14 +7,16 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class LogoutTest extends TestCase
 {
     use RefreshDatabase;
 
-    // ログイアウトができる
     public function test_logout()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テスト用のユーザーを作成
         $user = User::factory()->create([
             'email' => 'test@example.com',

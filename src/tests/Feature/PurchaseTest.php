@@ -12,6 +12,7 @@ use App\Models\Purchase;
 use App\Models\Address;
 use Mockery;
 use Stripe\Checkout\Session as StripeSession;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class PurchaseTest extends TestCase
 {
@@ -19,6 +20,8 @@ class PurchaseTest extends TestCase
 
     public function test_purchase_function()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock
@@ -108,6 +111,8 @@ class PurchaseTest extends TestCase
 
     public function test_purchased_items_are_marked_as_sold()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock
@@ -184,6 +189,8 @@ class PurchaseTest extends TestCase
 
     public function test_purchased_items_add_list_on_mypage()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock

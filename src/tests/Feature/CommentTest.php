@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Item;
 use App\Models\Condition;
 use Illuminate\Support\Facades\DB;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class CommentTest extends TestCase
 {
@@ -16,6 +17,8 @@ class CommentTest extends TestCase
 
     public function test_login_user_is_register_comment()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
@@ -89,6 +92,8 @@ class CommentTest extends TestCase
 
     public function test_not_authenticated_is_not_register_comment()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザーを作成
         $user = User::factory()->create([
             'name' => 'テストユーザー',
@@ -132,6 +137,8 @@ class CommentTest extends TestCase
 
     public function test_shows_validation_message_when_comment_is_missing()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
@@ -181,6 +188,8 @@ class CommentTest extends TestCase
 
     public function test_shows_validation_message_when_comment_is_more_than_256_characters()
     {
+        $this->withoutMiddleware(VerifyCsrfToken::class);
+
         // テストユーザー1を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
