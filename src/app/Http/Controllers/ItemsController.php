@@ -12,38 +12,59 @@ class ItemsController extends Controller
     {
         $page = $request->query('page', 'recommend');
         $keyword = $request->input('keyword');
-        $items = collect();
-
-        if ($page === 'recommend') {
-            $itemsQuery = Item::with('purchase')->orderBy('id', 'desc');
-            if (Auth::check()) {
-                $itemsQuery->where('user_id', '!=', Auth::id());
-            }
-            if (!empty($keyword)) {
-                $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
-            }
-            $items = $itemsQuery->get();
-        } elseif ($page === 'mylist') {
-            if (Auth::check()) {
-                $itemsQuery = Auth::user()->favorites()
-                    ->where('items.user_id', '!=', Auth::id())
-                    ->withPivot('created_at')
-                    ->orderBy('pivot_created_at', 'desc');
-
-                if (!empty($keyword)) {
-                    $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
-                }
-                $items = $itemsQuery->get();
-            }
-        } else {
-            $itemsQuery = Item::with('purchase')->orderBy('id', 'desc');
-            if (!empty($keyword)) {
-                $itemsQuery->where('name', 'LIKE', "%{$keyword}%");
-            }
-            $items = $itemsQuery->get();
-        }
+        $items = $this->getFilteredItems($page, $keyword);
 
         return view('index', compact('page', 'items', 'keyword'));
+    }
+
+    private function getFilteredItems($page, $keyword)
+    {
+        switch ($page) {
+            case 'recommend':
+                return $this->getRecommendItems($keyword);
+            case 'mylist':
+                return $this->getMyListItems($keyword);
+            default:
+                return $this->getAllItems($keyword);
+        }
+    }
+
+    private function getRecommendItems($keyword)
+    {
+        $query = Item::with('purchase')->orderBy('id', 'desc');
+
+        if (Auth::check()) {
+            $query->where('user_id', '!=', Auth::id());
+        }
+        return $this->applyKeywordFilter($query, $keyword)->get();
+    }
+
+    private function getMylistItems($keyword)
+    {
+        if (!Auth::check()) {
+            return collect();
+        }
+
+        $query = Auth::user()->favorites()
+            ->where('items.user_id', '!=', Auth::id())
+            ->withPivot('created_at')
+            ->orderBy('pivot_created_at', 'desc');
+
+            return $this->applyKeywordFilter($query, $keyword)->get();
+    }
+
+    private function getAllItems($keyword)
+    {
+        $query = Item::with('purchase')->orderBy('id', 'desc');
+        return $this->applyKeywordFilter($query, $keyword)->get();
+    }
+
+    private function applyKeywordFilter($query, $keyword)
+    {
+        if (!empty($keyword)) {
+            $query->where('name', 'LIKE', "%{$keyword}%");
+        }
+        return $query;
     }
 
     public function show($id)
