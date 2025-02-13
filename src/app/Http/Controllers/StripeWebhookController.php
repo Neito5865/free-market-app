@@ -19,12 +19,10 @@ class StripeWebhookController extends Controller
         $sigHeader = $request->header('Stripe-Signature');
         $secret = config('services.stripe.webhook_secret');
 
-        // Webhookの署名検証
         $event = \Stripe\Webhook::constructEvent(
             $payload, $sigHeader, $secret
         );
 
-        // イベントタイプごとの処理
         if ($event->type === 'checkout.session.completed') {
             $this->handleSuccessfulPayment($event->data->object);
         } elseif ($event->type === 'payment_intent.succeeded') {
@@ -67,7 +65,7 @@ class StripeWebhookController extends Controller
                 'user_id' => $userId,
                 'item_id' => $item->id,
                 'address_id' => $address->id,
-                'payment_method' => 1, // 支払い方法
+                'payment_method' => 1,
             ]);
 
             session()->forget('selected_address');

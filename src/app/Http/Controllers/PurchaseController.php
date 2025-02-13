@@ -8,6 +8,8 @@ use App\Models\Item;
 use App\Models\Address;
 use App\Models\Purchase;
 use App\Http\Requests\PurchaseRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
@@ -93,35 +95,43 @@ class PurchaseController extends Controller
             return response()->view('errors.error-page', ['message' => '該当の商品が存在しません。'], 404);
         }
 
-        $addressData = session('selected_address');
+        $addressData = session('selected_address') ?? [
+            'name' => $user->name,
+            'post_code' => $user->post_code,
+            'address' => $user->address,
+            'building' => $user->building,
+        ];
+
         $paymentMethod = session('selected_payment_method');
 
-        if (!$addressData) {
-            $addressData = [
-                'name' => $user->name,
-                'post_code' => $user->post_code,
-                'address' => $user->address,
-                'building' => $user->building,
-            ];
+        try{
+            DB::beginTransaction();
+
+            $address = Address::create([
+                'name' => $addressData['name'],
+                'post_code' => $addressData['post_code'],
+                'address' => $addressData['address'],
+                'building' => $addressData['building'],
+            ]);
+
+            $purchase = Purchase::create([
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+                'address_id' => $address->id,
+                'payment_method' => $paymentMethod,
+            ]);
+
+            DB::commit();
+
+            session()->forget('selected_address');
+            session()->forget('selected_payment_method');
+
+            return redirect()->route('item.index')->with('successMessage', '購入が完了しました');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('購入処理中にエラーが発生しました' . $e->getMessage());
+
+            return redirect()->route('item.index')->with('errorMessage', '購入処理中にエラーが発生しました。');
         }
-
-        $address = Address::create([
-            'name' => $addressData['name'],
-            'post_code' => $addressData['post_code'],
-            'address' => $addressData['address'],
-            'building' => $addressData['building'],
-        ]);
-
-        $purchase = Purchase::create([
-            'user_id' => $user->id,
-            'item_id' => $item->id,
-            'address_id' => $address->id,
-            'payment_method' => $paymentMethod,
-        ]);
-
-        session()->forget('selected_address');
-        session()->forget('selected_payment_method');
-
-        return redirect()->route('item.index')->with('successMessage', '購入が完了しました');
     }
 }
