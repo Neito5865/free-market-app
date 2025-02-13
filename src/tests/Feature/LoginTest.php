@@ -17,22 +17,17 @@ class LoginTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
 
-        // 必要なデータを準備
         $data = [
             'password' => 'password',
         ];
 
-        // 会員登録のリクエストを送信
         $response = $this->post('/login', $data);
 
-        // 検証：バリデーションメッセージが表示されるか
         $response->assertSessionHasErrors(['email' => 'メールアドレスを入力してください']);
 
-        // リダイレクト先が正しいか確認
         $response->assertRedirect('/login');
     }
 
@@ -40,22 +35,16 @@ class LoginTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
 
-        // 必要なデータを準備
         $data = [
             'email' => 'user1@example.com',
         ];
-
-        // ログインのリクエストを送信
         $response = $this->post('/login', $data);
 
-        // 検証：バリデーションメッセージが表示されるか
         $response->assertSessionHasErrors(['password' => 'パスワードを入力してください']);
 
-        // リダイレクト先が正しいか確認
         $response->assertRedirect('/login');
     }
 
@@ -64,23 +53,17 @@ class LoginTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
 
-        // 必要なデータを準備
         $data = [
             'email' => 'user100@example.com',
             'password' => 'password',
         ];
-
-        // 会員登録のリクエストを送信
         $response = $this->post('/login', $data);
 
-        // 検証：バリデーションメッセージが表示されるか
         $response->assertSessionHasErrors(['email' => __('auth.failed')]);
 
-        // リダイレクト先が正しいか確認
         $response->assertRedirect('/login');
     }
 
@@ -89,32 +72,24 @@ class LoginTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // テスト用のユーザーを作成
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
 
-        // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
 
-        // 必要なデータを準備
         $data = [
             'email' => 'test@example.com',
             'password' => 'password',
         ];
-
-        // ログインのリクエストを送信
         $response = $this->post('/login', $data);
 
-        // リダイレクト先が正しいか確認
         $response->assertRedirect('/?page=mylist');
 
-        // ログイン状態を確認
         $this->assertTrue(Auth::check());
 
-        // ログインしたユーザーが正しいか確認
         $this->assertEquals($user->id, Auth::id());
     }
 }

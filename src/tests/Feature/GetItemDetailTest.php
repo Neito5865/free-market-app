@@ -18,14 +18,12 @@ class GetItemDetailTest extends TestCase
 
     public function test_all_information_of_item()
     {
-        // テストユーザー1を作成（商品出品ユーザー）
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
             'email' => 'test1@test.com',
             'password' => bcrypt('password'),
         ]);
 
-        // テストユーザー2を作成（いいね・コメントをするユーザー）
         $user2 = User::factory()->create([
             'name' => 'テストユーザー2',
             'email' => 'test2@test.com',
@@ -33,12 +31,10 @@ class GetItemDetailTest extends TestCase
             'image' => 'profile-img/test_user2.jpg'
         ]);
 
-        // テスト用の商品状態を作成
         $condition = Condition::create([
             'condition' => 'テストコンディション',
         ]);
 
-        // テスト用の商品を作成
         $item = Item::create([
             'name' => 'テスト商品',
             'price' => 1000,
@@ -49,20 +45,17 @@ class GetItemDetailTest extends TestCase
             'image' => 'item-img/test.jpg'
         ]);
 
-        // テスト用のいいねレコードを作成
         DB::table('favorites')->insert([
             'user_id' => $user2->id,
             'item_id' => $item->id
         ]);
 
-        // テスト用のコメントを作成
         $comment = Comment::create([
             'user_id' => $user2->id,
             'item_id' => $item->id,
             'comment' => 'テストコメント'
         ]);
 
-        // テスト用のカテゴリーを作成
         $category1 = Category::create([
             'category' => 'テストカテゴリー1',
         ]);
@@ -70,7 +63,6 @@ class GetItemDetailTest extends TestCase
             'category' => 'テストカテゴリー2',
         ]);
 
-        // テスト用のitem_categoryレコードを作成
         DB::table('item_category')->insert([
             [
                 'item_id' => $item->id,
@@ -82,34 +74,28 @@ class GetItemDetailTest extends TestCase
             ],
         ]);
 
-        // 商品詳細ページへアクセス
         $response = $this->get(route('item.show', $item->id));
         $response->assertStatus(200);
 
-        // 商品の情報が表示されているか確認
-        $response->assertSee('<img src="' . asset('storage/' . $item->image) . '"', false); // 商品画像
-        $response->assertSee($item->name); // 商品名
-        $response->assertSee($item->brand); // ブランド名
-        $response->assertSee($item->formatted_price); // 価格
-        $response->assertSee($item->description); // 商品説明
-        $response->assertSee($condition->condition); // 商品の状態
-        $response->assertSee($comment->user->name); // コメントしたユーザー名
+        $response->assertSee('<img src="' . asset('storage/' . $item->image) . '"', false);
+        $response->assertSee($item->name);
+        $response->assertSee($item->brand);
+        $response->assertSee($item->formatted_price);
+        $response->assertSee($item->description);
+        $response->assertSee($condition->condition);
+        $response->assertSee($comment->user->name);
 
-        // コメントしたユーザー画像
         $expectedStyle = "background-image: url('" . asset('storage/' . $user2->image) . "');";
         $response->assertSee($expectedStyle, false);
 
-        $response->assertSee($comment->comment); // コメント内容
+        $response->assertSee($comment->comment);
 
-        // いいね数が表示されているか確認
         $likeCount = $item->favoriteUsers()->count();
         $response->assertSee((string) $likeCount);
 
-        // コメント数が表示されているか確認
         $commentCount = $item->comments()->count();
         $response->assertSee((string) $commentCount);
-
-        $response->assertSee($category1->category); // カテゴリ
-        $response->assertSee($category2->category); // カテゴリ
+        $response->assertSee($category1->category);
+        $response->assertSee($category2->category);
     }
 }

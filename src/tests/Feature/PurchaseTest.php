@@ -22,7 +22,6 @@ class PurchaseTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock
             ->shouldReceive('create')
@@ -31,7 +30,6 @@ class PurchaseTest extends TestCase
                 'url' => 'https://checkout.stripe.com/mock-session'
             ]);
 
-        // テストユーザー1（購入者）を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
             'email' => 'test1@test.com',
@@ -41,19 +39,16 @@ class PurchaseTest extends TestCase
             'building' => 'テストマンション'
         ]);
 
-        // テストユーザー2（出品者）を作成
         $user2 = User::factory()->create([
             'name' => 'テストユーザー2',
             'email' => 'test2@test.com',
             'password' => bcrypt('password'),
         ]);
 
-        // テスト用の商品状態を作成
         $condition = Condition::create([
             'condition' => 'テストコンディション',
         ]);
 
-        // 購入用のテスト商品を作成
         $item = Item::create([
             'name' => 'テスト商品',
             'price' => 1000,
@@ -64,14 +59,11 @@ class PurchaseTest extends TestCase
             'image' => 'item-img/test.jpg'
         ]);
 
-        // ユーザー1をログイン状態に設定
         $this->actingAs($user1);
 
-        // 購入画面へアクセス
         $response = $this->get(route('purchase.create', $item->id));
         $response->assertStatus(200);
 
-        // 商品購入のリクエストを送信
         $response = $this->post(route('purchase.payment', $item->id), [
             'payment_method' => 2,
             'selected_address' => [
@@ -82,22 +74,17 @@ class PurchaseTest extends TestCase
             ],
         ]);
 
-        // モックしたリダイレクトURLが使われているか確認
         $response->assertRedirectContains('https://checkout.stripe.com/mock-session');
 
-        // 購入完了後にアクセス
         $response = $this->get(route('purchase.completed', $item->id));
 
-        // トップページへのリダイレクトを確認
         $response->assertRedirect(route('item.index'));
 
-        // purchasesテーブルにデータが保存されたか確認
         $this->assertDatabaseHas('purchases', [
             'user_id' => $user1->id,
             'item_id' => $item->id,
         ]);
 
-        // Addressesテーブルにデータが保存されたか確認
         $this->assertDatabaseHas('addresses', [
             'name' => $user1->name,
             'post_code' => $user1->post_code,
@@ -105,7 +92,6 @@ class PurchaseTest extends TestCase
             'building' => $user1->building,
         ]);
 
-        // フラッシュメッセージの確認
         $response->assertSessionHas('successMessage', '購入が完了しました');
     }
 
@@ -113,7 +99,6 @@ class PurchaseTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock
             ->shouldReceive('create')
@@ -122,7 +107,6 @@ class PurchaseTest extends TestCase
                 'url' => 'https://checkout.stripe.com/mock-session'
             ]);
 
-        // テストユーザー1（購入者）を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
             'email' => 'test1@test.com',
@@ -132,19 +116,16 @@ class PurchaseTest extends TestCase
             'building' => 'テストマンション'
         ]);
 
-        // テストユーザー2（出品者）を作成
         $user2 = User::factory()->create([
             'name' => 'テストユーザー2',
             'email' => 'test2@test.com',
             'password' => bcrypt('password'),
         ]);
 
-        // テスト用の商品状態を作成
         $condition = Condition::create([
             'condition' => 'テストコンディション',
         ]);
 
-        // 購入用のテスト商品を作成
         $item = Item::create([
             'name' => 'テスト商品',
             'price' => 1000,
@@ -155,14 +136,11 @@ class PurchaseTest extends TestCase
             'image' => 'item-img/test.jpg'
         ]);
 
-        // ユーザー1をログイン状態に設定
         $this->actingAs($user1);
 
-        // 購入画面へアクセス
         $response = $this->get(route('purchase.create', $item->id));
         $response->assertStatus(200);
 
-        // 商品購入のリクエストを送信
         $response = $this->post(route('purchase.payment', $item->id), [
             'payment_method' => 2,
             'selected_address' => [
@@ -173,17 +151,12 @@ class PurchaseTest extends TestCase
             ],
         ]);
 
-        // モックしたリダイレクトURLが使われているか確認
         $response->assertRedirectContains('https://checkout.stripe.com/mock-session');
 
-        // 購入完了後のリクエスト（リダイレクト）
         $response = $this->get(route('purchase.completed', $item->id));
         $response->assertRedirect(route('item.index'));
 
-        // 商品一覧ページへアクセス
         $response = $this->get(route('item.index'));
-
-        // 購入済み商品が「SOLD」と表示されることを確認
         $response->assertSee('SOLD');
     }
 
@@ -191,7 +164,6 @@ class PurchaseTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // Stripeのモックを設定
         $stripeSessionMock = Mockery::mock('alias:Stripe\Checkout\Session');
         $stripeSessionMock
             ->shouldReceive('create')
@@ -200,7 +172,6 @@ class PurchaseTest extends TestCase
                 'url' => 'https://checkout.stripe.com/mock-session'
             ]);
 
-        // テストユーザー1（購入者）を作成
         $user1 = User::factory()->create([
             'name' => 'テストユーザー1',
             'email' => 'test1@test.com',
@@ -210,19 +181,16 @@ class PurchaseTest extends TestCase
             'building' => 'テストマンション'
         ]);
 
-        // テストユーザー2（出品者）を作成
         $user2 = User::factory()->create([
             'name' => 'テストユーザー2',
             'email' => 'test2@test.com',
             'password' => bcrypt('password'),
         ]);
 
-        // テスト用の商品状態を作成
         $condition = Condition::create([
             'condition' => 'テストコンディション',
         ]);
 
-        // 購入用のテスト商品を作成
         $item = Item::create([
             'name' => 'テスト商品',
             'price' => 1000,
@@ -233,14 +201,11 @@ class PurchaseTest extends TestCase
             'image' => 'item-img/test.jpg'
         ]);
 
-        // ユーザー1をログイン状態に設定
         $this->actingAs($user1);
 
-        // 購入画面へアクセス
         $response = $this->get(route('purchase.create', $item->id));
         $response->assertStatus(200);
 
-        // 商品購入のリクエストを送信
         $response = $this->post(route('purchase.payment', $item->id), [
             'payment_method' => 2,
             'selected_address' => [
@@ -251,17 +216,13 @@ class PurchaseTest extends TestCase
             ],
         ]);
 
-        // モックしたリダイレクトURLが使われているか確認
         $response->assertRedirectContains('https://checkout.stripe.com/mock-session');
 
-        // 購入完了後のリクエスト（リダイレクト）
         $response = $this->get(route('purchase.completed', $item->id));
         $response->assertRedirect(route('item.index'));
 
-        // マイページの購入した商品一覧へアクセスする
         $response = $this->get(route('user.show', ['tab' => 'buy']));
 
-        // 購入済み商品が表示されることを確認
         $response->assertSee($item->name);
     }
 }

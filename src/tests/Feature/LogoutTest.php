@@ -17,38 +17,29 @@ class LogoutTest extends TestCase
     {
         $this->withoutMiddleware(VerifyCsrfToken::class);
 
-        // テスト用のユーザーを作成
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
 
-        // ログインページへアクセス
         $response = $this->get('/login');
         $response->assertStatus(200);
 
-        // 必要なデータを準備
         $data = [
             'email' => 'test@example.com',
             'password' => 'password',
         ];
 
-        // ログインのリクエストを送信
         $response = $this->post('/login', $data);
 
-        // ログイン状態を確認
         $this->assertTrue(Auth::check());
 
-        // ログインしたユーザーが正しいか確認
         $this->assertEquals($user->id, Auth::id());
 
-        // ログアウトのリクエストを送信
         $response = $this->post('/logout');
 
-        // ログアウトしたか確認
         $this->assertFalse(Auth::check());
 
-        // リダイレクト先が正しいか
         $response->assertRedirect('/');
     }
 }
