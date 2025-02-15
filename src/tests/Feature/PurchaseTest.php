@@ -92,7 +92,7 @@ class PurchaseTest extends TestCase
             'building' => $user1->building,
         ]);
 
-        $response->assertSessionHas('successMessage', '購入が完了しました');
+        $response->assertSessionHas('success', '購入が完了しました');
     }
 
     public function test_purchased_items_are_marked_as_sold()

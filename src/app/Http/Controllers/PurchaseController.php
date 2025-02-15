@@ -126,12 +126,12 @@ class PurchaseController extends Controller
             session()->forget('selected_address');
             session()->forget('selected_payment_method');
 
-            return redirect()->route('item.index')->with('successMessage', '購入が完了しました');
+            return redirect()->route('item.index')->with('success', '購入が完了しました');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('購入処理中にエラーが発生しました' . $e->getMessage());
 
-            return redirect()->route('item.index')->with('errorMessage', '購入処理中にエラーが発生しました。');
+            return redirect()->route('item.index')->with('error', '購入処理中にエラーが発生しました。');
         }
     }
 }

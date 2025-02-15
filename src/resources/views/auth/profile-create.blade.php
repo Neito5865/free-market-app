@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+    @include('session_message.session_message')
     <div class="profile__container">
         <div class="profile__heading">
             <h2>プロフィール設定</h2>

@@ -10,6 +10,30 @@
     border-radius: 5px;
 }
 
+.message__error {
+    background-color: #f8d3ca;
+    font-size: 18px;
+    color: #951b12;
+    margin: 20px auto 0 auto;
+    width: 95%;
+    max-width: 1360px;
+    margin: 20px auto 0 auto;
+    padding: 10px 0 10px 20px;
+    border-radius: 5px;
+}
+
+.message__info {
+    background-color: #cae2f8;
+    font-size: 18px;
+    color: #194e86;
+    margin: 20px auto 0 auto;
+    width: 95%;
+    max-width: 1360px;
+    margin: 20px auto 0 auto;
+    padding: 10px 0 10px 20px;
+    border-radius: 5px;
+}
+
 .tabs__labels{
     display: flex;
     justify-content: flex-start;

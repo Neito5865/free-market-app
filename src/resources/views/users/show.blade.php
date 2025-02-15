@@ -5,11 +5,7 @@
 @endsection
 
 @section('content')
-    @if (session('successMessage'))
-        <div class="message__success">
-            {{ session('successMessage') }}
-        </div>
-    @endif
+    @include('session_message.session_message')
     <div class="mypage__container">
         <div class="profile__content">
             <div class="profile-inner">

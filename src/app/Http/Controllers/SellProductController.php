@@ -36,6 +36,6 @@ class SellProductController extends Controller
         $item = Item::create($itemData);
         $item->categories()->attach($request->input('categories'));
 
-        return redirect()->route('user.show')->with('successMessage', '商品を出品しました');
+        return redirect()->route('user.show')->with('success', '商品を出品しました');
     }
 }

@@ -71,6 +71,6 @@ class UsersController extends Controller
             $userData['image'] = 'profile-img/' . basename($path);
         }
         $user->update($userData);
-        return redirect()->route('user.show')->with('successMessage', 'プロフィールを更新しました');
+        return redirect()->route('user.show')->with('success', 'プロフィールを更新しました');
     }
 }
