@@ -122,7 +122,7 @@ php artisan db:seed
  - phpMyAdmin：http://localhost:8080
 
 ## その他
- - 以下のユーザー情報でログイン可能。
+ - 以下のユーザー情報でログイン可能。  
  メールアドレス：user1@example.com  
  パスワード：password
 
