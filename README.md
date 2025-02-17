@@ -112,6 +112,11 @@ php artisan migrate
 php artisan db:seed
 ```
 
+8. シンボリックリンクの作成
+```
+php artisan storage:link
+```
+
 ## ER図
 ![er drawio](https://github.com/user-attachments/assets/94f17325-ef9b-4e55-a3e3-114489b46f1d)
 
