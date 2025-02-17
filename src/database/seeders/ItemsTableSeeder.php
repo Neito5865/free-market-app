@@ -15,10 +15,8 @@ class ItemsTableSeeder extends Seeder
      */
     public function run()
     {
-        // 画像のソースディレクトリ
         $sourcePath = base_path('public/item-img');
 
-        // コピーする先（storageのpublicディレクトリ）
         $destinationPath = storage_path('app/public/item-img');
 
         $items = [
@@ -114,18 +112,16 @@ class ItemsTableSeeder extends Seeder
             ],
         ];
 
-        // 画像をstorage/publicにコピー
         foreach ($items as $item) {
             $sourceFile = $sourcePath . '/' . basename($item['image']);
             $destinationFile = $destinationPath . '/' . basename($item['image']);
 
             if (!file_exists($destinationFile)) {
-                @mkdir(dirname($destinationFile), 0777, true); // ディレクトリがなければ作成
-                copy($sourceFile, $destinationFile); // 画像をコピー
+                @mkdir(dirname($destinationFile), 0777, true);
+                copy($sourceFile, $destinationFile);
             }
         }
 
-        // テーブルにデータを挿入
         DB::table('items')->insert($items);
     }
 }
